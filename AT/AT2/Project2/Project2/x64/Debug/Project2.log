@@ -1,0 +1,5 @@
+﻿  Masina.cpp
+C:\Users\andre\coding\C++\Ivan_Andreea_Paula_ActivitatePOOID2024\AT\AT2\Project2\Masina.cpp(103,45): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\andre\coding\C++\Ivan_Andreea_Paula_ActivitatePOOID2024\AT\AT2\Project2\Masina.cpp(103,50): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\andre\coding\C++\Ivan_Andreea_Paula_ActivitatePOOID2024\AT\AT2\Project2\Masina.cpp(119,35): warning C4305: 'initializing': truncation from 'double' to 'float'
+  Project2.vcxproj -> C:\Users\andre\coding\C++\Ivan_Andreea_Paula_ActivitatePOOID2024\AT\AT2\Project2\x64\Debug\Project2.exe
