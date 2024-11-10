@@ -1,1 +1,1 @@
-#### Homework for the Object Oriented Programming (C++) Course
+#### Homework repository for the Object Oriented Programming (C++) Course
