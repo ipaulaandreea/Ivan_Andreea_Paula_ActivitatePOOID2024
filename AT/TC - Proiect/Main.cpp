@@ -2,6 +2,7 @@
 // In cazul meu, clasa Prajitura va reprezenta un anumit sortiment de prajitura
 
 #include <string>
+#include <cmath> 
 using namespace std;
 
 class Cofetarie {
@@ -9,12 +10,12 @@ class Cofetarie {
 	private:
 		string nume;
 		const int id;
-		static int nrCofetarii = 0;
-		static int codCaen = 4724;
+		static int nrCofetarii;
+		static int codCaen;
 		string adresa;
-		Angajat* administrator;
-		Prajitura* prajituri;
-		static int nrPrajituri = 0;
+		string administrator;
+		string* prajituri;
+		int nrPrajituri;
 
 	public:
 
@@ -24,113 +25,209 @@ class Cofetarie {
 			};
 		};
 
-		Cofetarie() 
+		Cofetarie(
+			string administrator = "Necunoscut",
+			string nume = "Necunoscut",
+			string adresa = "Necunoscuta",
+			int nrPrajituri = 0,
+			int prajitur = nullptr)
 			: id(++nrCofetarii) {
-			this->administrator = nullptr;
-			this->nume = "Necunoscut";
-			this->adresa = "Necunoscuta";
-			this->nrAngajati = 0;
-			this->prajituri = nullptr;
+			this->administrator = administrator;
+			this->nume = nume;
+			this->adresa = adresa;
+			this->nrPrajituri = nrPrajituri;
+			this->prajituri = prajituri;
 		};
 
 		Coferatarie(
 			string adresa,
-			int nrPrajituri,
-			Prajitura* prajituri)
+			string *prajituri, 
+			int nrPrajituri)
 			:id(++nrCofetarii) {
-			this->adresa = adresa;
+			this->nume = "Necunoscut";
+			this->administrator = "Necunoscut;
 			this->nrPrajituri = nrPrajituri;
+			this->adresa = adresa;
 			this->prajituri = new Prajitura[nrPrajituri];
 			for (int i = 0; i < nrPrajituri; i++) {
 				this->prajituri[i] = prajituri[i];
 			};
 			delete[] prajituri;
 		};
-};
 
-class Anjagat {
-
-	private:
-		const int id;
-		static int nrAngajati = 0;
-		string nume;
-		string prenume;
-		const long long [13] CNP;
-		char* functie;
-
-	public:
-		~Angajat() {
-			if (this->functie = NULL) {
-				delete[]this->functie;
-			}
-			nrAngajati--;
+		Coferatarie(
+			string adresa,
+			string* prajituri,
+			int nrPrajituri,
+			string administrator, 
+			)
+			:id(++nrCofetarii) {
+			this->nume = "Necunoscut";
+			this->administrator = "Necunoscut;
+				this->nrPrajituri = nrPrajituri;
+			this->adresa = adresa;
+			this->prajituri = new Prajitura[nrPrajituri];
+			for (int i = 0; i < nrPrajituri; i++) {
+				this->prajituri[i] = prajituri[i];
+			};
+			delete[] prajituri;
 		};
 
-		Anjagat() : id(++nrAngajati){
-			this->nume = "Necunoscut";
-			this->prenume = "Necunoscut";
-			this->CNP = 0000000000000;
-			this->functie = new char[strlen("Necunoscut") + 1];
-			strcpy_s(this->functie, strlen("Necunoscut") + 1, "Necunoscut");
+		static void afisareCodCaen() {
+			cout << "Codul CAEN al cofetariei este: " << 
+				Cofetarie::codCaen << endl;
+
 		}
 
-		Anjagat(
-			string nume,
-			string prenume,
-			long long CNP,
-			char* functie)
-			: id(++nrAngajati) {
-			this->nume = nume;
-			this->prenume = prenume;
-			this->CNP = CNP;
-			this->functie = new char[strlen(functie) + 1];
-			strcpy_s(this->functie, strlen(functie) + 1, functie);
-		};
+};
+
+class Angajat {
+
+private:
+	const int id;
+	const long long CNP[13];
+	static int nrAngajati;
+	string nume;
+	string prenume;
+	char* functie;
+
+public:
+	~Angajat() {
+		if (this->functie != nullptr) {
+			delete[] this->functie;
+			this->functie = nullptr;
+		}
+	};
+
+	Angajat(
+		string nume = "Necunoscut",
+		string prenume = "Necunoscut")
+		: id(++nrAngajati),
+		CNP(0000000000000)
+	{
+		this->nume = nume;
+		this->prenume = prenume;
+		this->functie = new char[strlen("Necunoscut") + 1];
+		strcpy_s(this->functie, strlen("Necunoscut") + 1, "Necunoscut");
+	}
+
+	Angajat(
+		string nume,
+		string prenume,
+		long long CNP,
+		char* functie)
+		: id(++nrAngajati), CNP(CNP) {
+		this->nume = nume;
+		this->prenume = prenume;
+		this->functie = new char[strlen(functie) + 1];
+		strcpy_s(this->functie, strlen(functie) + 1, functie);
+	};
+
+	Angajat(string nume,
+		string prenume,
+		long long CNP)
+		: id(++nrAngajati),
+		CNP(CNP) {
+		this->nume = nume;
+		this->prenume = prenume;
+		this->functie = nullptr;
+	};
+
+	static void determinareSexAngajat(long long CNP) {
+		int primaCifra = CNP / 1000000000000 % 10; 
+
+		if (primaCifra == 2 || firstDigit == 6) {
+			cout << "Femeie" << endl;
+		}
+		else if (firstDigit == 1 || firstDigit == 5) {
+			cout << "Barbat" << endl;
+		}
+		else {
+			cout << "CNP invalid" << endl;
+		}
+	}
 };
 
 class Prajitura {
-	private:
-		const int id;
-		static int nrPrajituri = 0;
-		string nume;
-		float pret;
-		string* ingrediente;
-		const int nrBucati;
+private:
+	const int id;
+	static int nrPrajituri;
+	string nume;
+	float pret;
+	int nrIngrediente;
+	string* ingrediente;
+	const int nrBucati;
 
-		~Prajitura() {
-			if (ingrediente != nullptr) {
-				delete[] ingrediente; 
-			}
-			nrPrajituri--;
-		};
-
-		Prajitura()
-			:id(++nrPrajituri), ingrediente(nullptr), nrIngrediente(0), nrBucati(0) {
-			this.nume = "Necunoscut";
-			this->pret = 0.0;
-
-		};
-
-		Prajitura(string nume, float pret, int nrIngrediente, const vector<string>& ingrediente, int nrBucati)
-			:id(++nrPrajituri, nrIngrediente(nrIngrediente), nrBucati(nrBucati)) {
-			this.nume = nume;
-			this->pret = pret;
-			this->ingrediente = new string[nrIngrediente];
-			for (int i = 0; i < nrIngrediente; i++) {
-				this->ingrediente[i] = ingrediente[i];
-			} 
+	~Prajitura() {
+		if (ingrediente != nullptr) {
 			delete[] ingrediente;
 		}
+		nrPrajituri--;
+	};
+
+	Prajitura()
+		:id(++nrPrajituri),
+		ingrediente(nullptr),
+		nrIngrediente(0),
+		nrBucati(0) {
+		this.nume = "Necunoscut";
+		this->pret = 0.0;
+
+	};
+
+	Prajitura(
+		string nume,
+		float pret,
+		int nrIngrediente,
+		const vector<string>& ingrediente,
+		int nrBucati)
+		:id(++nrPrajituri) {
+		this->nrIngrediente = nrIngrediente;
+		this->nume = nume;
+		this->pret = pret;
+		this->nrBucati = nrBucati;
+		this->ingrediente = new string[nrIngrediente];
+		for (int i = 0; i < nrIngrediente; i++) {
+			this->ingrediente[i] = ingrediente[i];
+		}
+		delete[] ingrediente;
+	};
+
+	Prajitura(
+		string nume,
+		float pret,
+		int nrBucati)
+		:id(++nrPrajituri) {
+		this->nrIngrediente = 0;
+		this->nume = nume;
+		this->pret = pret;
+		this->nrBucati = nrBucati;
+		this->ingrediente = nullptr;
+	};
+
+
+
+	static int rotunjirePret(float pret) {
+		return static_cast<int>(std::round(pret));
+
+	};
+
 };
 			
+int Cofetarie::nrCofetarii = 0;
+int Cofetarie::codCaen = 4724;
+int Angajat::nrAngajati = 0;
+int Prajitura::nrPrajituri = 0;
+
+
+
 
 
 	////Todos: 
+	// ///make sure all fields are initialized in constructor
 	// check access modifiers
 	// //make sure each class has a pointer field
-	// make sure each class has 3 constructors
 	// add getters and setters
-	// add static methods to each class
 	// add objects in main;
 	//make sure code runs;
 			
