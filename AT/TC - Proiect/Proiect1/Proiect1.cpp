@@ -41,44 +41,44 @@ public:
 	}
 
 
-		Cofetarie(
-			string adresa,
-			string* prajituri, 
-			int nrPrajituri)
-			: id(++nrCofetarii) {
-			this->nume = "Necunoscut";
-			this->administrator = "Necunoscut";
-			this->nrPrajituri = nrPrajituri;
-			this->adresa = adresa;
-			this->prajituri = new string[nrPrajituri];
-			for (int i = 0; i < nrPrajituri; i++) {
-				this->prajituri[i] = prajituri[i];
-			};
-			delete[] prajituri;
-		}
-
-		Cofetarie(
-			string adresa,
-			string* prajituri,
-			int nrPrajituri,
-			string administrator)
-			: id(++nrCofetarii) {
-			this->nume = "Necunoscut";
-			this->administrator = administrator;
-			this->nrPrajituri = nrPrajituri;
-			this->adresa = adresa;
-			this->prajituri = new string[nrPrajituri];
-			for (int i = 0; i < nrPrajituri; i++) {
-				this->prajituri[i] = prajituri[i];
-			};
-			delete[] prajituri;
+	Cofetarie(
+		string adresa,
+		string* prajituri,
+		int nrPrajituri)
+		: id(++nrCofetarii) {
+		this->nume = "Necunoscut";
+		this->administrator = "Necunoscut";
+		this->nrPrajituri = nrPrajituri;
+		this->adresa = adresa;
+		this->prajituri = new string[nrPrajituri];
+		for (int i = 0; i < nrPrajituri; i++) {
+			this->prajituri[i] = prajituri[i];
 		};
+		delete[] prajituri;
+	}
 
-		static void afisareCodCaen() {
-			cout << "Codul CAEN al cofetariei este: " << 
-				Cofetarie::codCaen << endl;
+	Cofetarie(
+		string adresa,
+		string* prajituri,
+		int nrPrajituri,
+		string administrator)
+		: id(++nrCofetarii) {
+		this->nume = "Necunoscut";
+		this->administrator = administrator;
+		this->nrPrajituri = nrPrajituri;
+		this->adresa = adresa;
+		this->prajituri = new string[nrPrajituri];
+		for (int i = 0; i < nrPrajituri; i++) {
+			this->prajituri[i] = prajituri[i];
+		};
+		delete[] prajituri;
+	};
 
-		}
+	static void afisareCodCaen() {
+		cout << "Codul CAEN al cofetariei este: " <<
+			Cofetarie::codCaen << endl;
+
+	}
 
 };
 
@@ -133,7 +133,7 @@ public:
 	};
 
 	static void determinareSexAngajat(long long CNP) {
-		int primaCifra = CNP / 1000000000000 % 10; 
+		int primaCifra = CNP / 1000000000000 % 10;
 
 		if (primaCifra == 2 || primaCifra == 6) {
 			cout << "Femeie" << endl;
@@ -216,7 +216,7 @@ public:
 	}
 
 };
-			
+
 int Cofetarie::nrCofetarii = 0;
 int Cofetarie::codCaen = 4724;
 int Angajat::nrAngajati = 0;
@@ -224,11 +224,11 @@ int Prajitura::nrPrajituri = 0;
 
 int main() {
 
-	cout << "Hello world" << endl;
+	cout << "Hello world!" << endl;
 
 	Cofetarie cofetarie1;
 	Cofetarie cofetarie2("Adresa 1", new string[3]{ "Amandina", "Savarina", "Tort diplomat" }, 3);
-	Cofetarie cofetarie3("Adresa 2", new string[2]{ "Tiramisu", "Dobos"}, 2, "Popescu Ion");
+	Cofetarie cofetarie3("Adresa 2", new string[2]{ "Tiramisu", "Dobos" }, 2, "Popescu Ion");
 
 	Angajat angajat1;
 	Angajat angajat2("Popescu", "Ion", 1234567890000, (char*)"Administrator");
@@ -236,18 +236,17 @@ int main() {
 
 	Prajitura prajitura1;
 	Prajitura prajitura2("Amandina", 15.5, 10);
-	
-	Prajitura prajitura3("Foret Noir", 18.2, 3, new string[3]{"Visine", "Zahar", "Oua"}, 6);
-	
+
+	Prajitura prajitura3("Foret Noir", 18.2, 3, new string[3]{ "Visine", "Zahar", "Oua" }, 6);
+
 }
 
 
 
 
-	////Todos: 
-	// ///make sure all fields are initialized in constructor
-	// check access modifiers
-	// //make sure each class has a pointer field
-	// add getters and setters
-	//make sure code runs;
-			
+////Todos: 
+// ///make sure all fields are initialized in constructor
+// check access modifiers
+// //make sure each class has a pointer field
+// add getters and setters
+//make sure code runs;

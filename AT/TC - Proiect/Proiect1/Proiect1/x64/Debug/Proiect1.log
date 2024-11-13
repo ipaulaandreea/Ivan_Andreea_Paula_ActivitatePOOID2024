@@ -1,0 +1,4 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppClean.targets(77,5): warning : Access to the path 'c:\users\andre\coding\c++\ivan_andreea_paula_activitatepooid2024\at\tc - proiect\proiect1\x64\debug\proiect1.exe' is denied.
+  Proiect1.cpp
+C:\Users\andre\coding\C++\Ivan_Andreea_Paula_ActivitatePOOID2024\AT\TC - Proiect\Proiect1\Proiect1.cpp(240,37): warning C4305: 'argument': truncation from 'double' to 'float'
+LINK : fatal error LNK1104: cannot open file 'C:\Users\andre\coding\C++\Ivan_Andreea_Paula_ActivitatePOOID2024\AT\TC - Proiect\Proiect1\x64\Debug\Proiect1.exe'
