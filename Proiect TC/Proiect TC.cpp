@@ -142,7 +142,13 @@ public:
 		this->functie = nullptr;
 	};
 
-	static void determinareSexAngajat(long long CNP) {
+	static void afisareNrAngajati() {
+		cout << "Numarul angajatilor este: " <<
+			Angajat::nrAngajati << endl;
+
+	}
+
+	void determinareSexAngajat(long long CNP) {
 		int primaCifra = CNP / 1000000000000 % 10;
 
 		if (primaCifra == 2 || primaCifra == 6) {
