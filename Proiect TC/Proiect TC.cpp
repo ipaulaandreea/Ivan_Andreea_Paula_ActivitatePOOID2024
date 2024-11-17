@@ -3,12 +3,13 @@
 
 #include <string>
 #include <iostream>
+#include <stdexcept>
 
 
 using namespace std;
 
 class Cofetarie {
-
+	//1. Atribute
 private:
 	static int nrCofetarii;
 	static int codCaen;
@@ -20,12 +21,15 @@ private:
 	int nrPrajituri;
 
 public:
+
+	//2. Destructor
 	~Cofetarie() {
 		if (this->prajituri != nullptr) {
 			delete[] this->prajituri;
 		};
 	}
 
+	//3. Constructori
 	Cofetarie(
 		string administrator = "Necunoscut",
 		string nume = "Necunoscut",
@@ -75,7 +79,7 @@ public:
 	};
 
 	
-	/// Constructor de copiere
+	/// 3*. Constructor de copiere
 	Cofetarie(const Cofetarie& c) : id(c.id) {
 		this->nrPrajituri = c.nrPrajituri;
 		if (c.prajituri != nullptr) {
@@ -107,9 +111,75 @@ public:
 		cout << endl;
 	}
 
+	//4. Getteri
+	static int getNrCofetarii() { return Cofetarie::nrCofetarii; }	
+	static int getCodCaen() {return Cofetarie::codCaen};
+	const int getId() { return this->id; };
+	string getNume() { return this->nume; };
+	string getAdresa() { return this->adresa; };
+	string getAdministrator() { return this->administrator; };
+	string* getPrajituri() { return this->prajituri; };
+	int getNrPrajituri() { return this->nrPrajituri; };
+
+	//5. Setteri 
+	void setNrCofetarii(int nr) {
+		if (nr > 0) {
+			Cofetarie::nrCofetarii = nr;
+		}
+		else {
+			throw std::invalid_arugment("Numarul cofetariilor nu poate fi mai mic de 1");
+		}
+	};
+
+	void setCodCaen(int cod) {
+		if (cod >= 1000) {
+			Cofetari::codCaen = cod;
+		}
+		else {
+			throw std::invalid_argument("Codul CAEN nu poate avea mai putin de 4 cifre");
+		}
+	};
+		
+	//atributul id = de tip const => 
+	// nu poate fi modificat dupa atribuire => 
+	// nu putem declara setter pentru el;
+
+	void setAdresa(string adr) {
+		if (!adr.empty()) {
+			this->adresa = adr;
+		}
+		else {
+			this->adresa = "Necunoscuta";
+		}
+	};
+
+	void setAdministrator(string admin) { 
+		if (!admin.empty()) {
+			this->administrator = admin;
+		}
+		else {
+			this->administrator = "Necunoscuta";
+		}
+	};
+
+	void setPrajituri(string* prajituriNoi, int nrPrahituriNoi) { 
+		if (this->prajituri != nullptr) {
+			delete[] this->prajituri;
+		}
+		if (prajituriNoi != nullptr) {
+			this->prajituri = new string[nrPrajituriNoi];
+			for (int i = 0; i < nr PrajituriNoi; i++) {
+				this->prajituri[i] = prajituriNoi[i];
+			}
+		} else {
+			this->prajituri = nullptr;
+		}
+		this->nrPrajituri = nrPrajituriNoi;
+
 };
 
 class Angajat {
+	//1. Atribute
 
 private:
 	static int nrAngajati;
@@ -120,12 +190,15 @@ private:
 	char* functie;
 
 public:
+	//2. Destructor
+
 	~Angajat() {
 		if (this->functie != nullptr) {
 			delete[] this->functie;
 			this->functie = nullptr;
 		}
 	}
+	//3. Constructori
 
 	Angajat(
 		string nume = "Necunoscut",
@@ -159,11 +232,11 @@ public:
 		this->functie = nullptr;
 	};
 
-	/// Constructor de copiere
+	/// 3*. Constructor de copiere
 	Angajat(const Angajat& a) : id(a.id), CNP(a.CNP) {
 		if (a.functie != nullptr) {
 			this->functie = new char[strlen(a.functie) + 1];
-			strcpy(this->functie, a.functie);
+			strcpy_s(this->functie, strlen(functie) + 1, functie);
 		}
 		else {
 			this->functie = nullptr;
@@ -171,6 +244,60 @@ public:
 
 		this->nume = a.nume;
 		this->prenume = a.prenume;
+	}
+
+	//4. Getteri
+	static int getNrAngajati() { return Angajati::nrAngajati; };
+	const int getId() { return this->id; };
+	const long long getCNP() { return this->CNP; };
+	string getNume() { return this->nume; };
+	string getPrenume() { return this->prenume; };
+	char* getFunctie() { return this->functie; };
+
+//5. Setteri 
+	void setNrAngajati(int nr) {
+		if (nr > 0) {
+			Angajati::nrAngajati = nr;
+		}
+		else {
+			throw std::invalid_argument(
+				"numarul angajatilor trebuie sa fie de cel putin 1");
+		}
+	};
+
+	//atributulele id si CNP = de tip const => 
+	// nu pot fi modificate dupa atribuire => 
+	// nu putem declara setter pentru ele;
+
+
+	void setNume(string newNume) { 
+		if (newNume == "") {
+			this->nume = "Necunoscut";
+		} else {
+			this->nume = newNume;
+		};
+	};
+
+	void setPrenume(string newPrenume) {
+		if (newPrenume == "") {
+			this->prenume = "Necunoscut";
+		}
+		else {
+			this->prenume = newPrenume;
+		};
+	};
+
+	void setFunctie(char* newFunctie) {
+		if (this->functie != nullptr) {
+			delete[] functie;
+		}
+		if (newFunctie != nullptr) {
+			this->functie = char[strlen(newFunctie) + 1];
+			strcpy_s(this->functie, strlen(functie) + 1, functie);
+		}
+		else {
+			this->functie = nullptr;
+		}
 	}
 
 	static void afisareNrAngajati() {
@@ -201,6 +328,8 @@ public:
 };
 
 class Prajitura {
+	//1. Atribute
+
 private:
 	static int nrPrajituri;
 	const int id;
@@ -211,6 +340,7 @@ private:
 	int nrBucati;
 
 public:
+	//2. Destructor
 
 	~Prajitura() {
 		if (ingrediente != nullptr) {
@@ -218,6 +348,7 @@ public:
 		}
 		nrPrajituri--;
 	};
+	//3. Constructori
 
 	Prajitura()
 		:id(++nrPrajituri),
@@ -259,7 +390,7 @@ public:
 		this->ingrediente = nullptr;
 	};
 
-	/// Constructor de copiere
+	/// 3*. Constructor de copiere
 	Prajitura(const Prajitura& p) : id(p.id) {
 		this->nrIngrediente = p.nrIngrediente;
 		if (p.nrIngrediente != nullptr) {
@@ -277,7 +408,75 @@ public:
 		this->nrBucati = p.nrBucati;
 	}
 
+	//4. Getteri
+	static int getNrPrajituri() { return this->nrPrajituri; };
+	const int getId() { return this->id; };
+	string getNume() { return this->nume; };
+	float getPret() { return this->pret; }
+	int getNrIngrediente() { return this->nrIngrediente; };
+	string* getIngrediente() { return this->ingrediente; };
+	int getNrBucati() { return this->nrBucati; };
 
+//5. Setteri 
+	void setNrPrajituri(int nr) {
+		if (nr < 1) {
+			throw std::invalid_argument("Numarul sortimentelor nu poate fi mai mic de 1");
+		}
+		else {
+			Prajitura::nrPrajituri = nr; 
+		}
+	};
+
+	//atributul id = de tip const => 
+	// nu poate fi modificat dupa atribuire => 
+	// nu putem declara setter pentru el;
+
+	void setNume(string newName) {
+		if (newName == "") {
+			this->nume = "Necunoscut";
+		}
+		else {
+			this->nume = newName;
+		}
+	};
+
+	void setPret(float newPrice) {
+		if (newPrice <= 0) {
+			std::invalid_argument("Pretul nu poate fi mai mic de 0");
+		}
+	}
+
+	void setNrIngrediente(int nr) {
+		if (nr < 1) {
+			throw std::invalid_argument("Numarul ingredientelor nu poate fi mai mic de 1");
+		}
+		else {
+			this->nrIngrediente = nrIngrediente;
+		}
+	};
+	
+	void setIngrediente(string* newIngredients, int nrNewIngredients) {
+		if (this->ingrediente != nullptr) {
+			delete[] this->ingrediente;
+
+		} if (newIngredients != nullptr) {
+			string* ingrediente = new string[nrNewIngredients];
+			for (int i = 0; i < nrIngrediente; i++) {
+				this->ingrediente[i] = ingrediente[i];
+			}
+		}
+		else {
+			this->ingrediente = nullptr;
+		}
+	}
+	void setNrBucati(int newNr) { 
+		if (newNr < 0) {
+			throw std::invalid_argument("Numarul de bucati nu poate fi un numar negativ");
+		}
+		else {
+			this->nrBucati = newNr;
+		}
+	};
 
 
 	static void afisareNumarSortimente() {

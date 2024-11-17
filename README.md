@@ -34,7 +34,7 @@
 3. Implementați constructorul de copiere pentru toate clasele.  ✅
 
 4. Pentru toate atributele trecute acum în zona privată a clasei realizați metode de acces la acestea:  
-   - **Getteri** și **setteri**.  
+   - **Getteri** și **setteri**. ✅
 
 5. Pentru atributele statice realizați funcții statice pentru a oferi acces la acestea.  
 
