@@ -4,9 +4,20 @@
 #include <string>
 #include <iostream>
 #include <stdexcept>
-
+#include <cstring>
 
 using namespace std;
+
+///////////////////////////////////////////////////////////
+// 0. Zona globala - functii globale
+string getAdmin(Cofetarie c) { return c.administrator; };
+
+void printFullName(Angajat a) {
+	string fullName = a.nume + " " + a.prenume;
+	cout << fullName << endl;
+};
+
+///////////////////////////////////////////////////////////
 
 class Cofetarie {
 	//1. Atribute
@@ -112,8 +123,6 @@ public:
 	}
 
 	//4. Getteri
-	static int getNrCofetarii() { return Cofetarie::nrCofetarii; }	
-	static int getCodCaen() {return Cofetarie::codCaen};
 	const int getId() { return this->id; };
 	string getNume() { return this->nume; };
 	string getAdresa() { return this->adresa; };
@@ -122,23 +131,7 @@ public:
 	int getNrPrajituri() { return this->nrPrajituri; };
 
 	//5. Setteri 
-	void setNrCofetarii(int nr) {
-		if (nr > 0) {
-			Cofetarie::nrCofetarii = nr;
-		}
-		else {
-			throw std::invalid_arugment("Numarul cofetariilor nu poate fi mai mic de 1");
-		}
-	};
 
-	void setCodCaen(int cod) {
-		if (cod >= 1000) {
-			Cofetari::codCaen = cod;
-		}
-		else {
-			throw std::invalid_argument("Codul CAEN nu poate avea mai putin de 4 cifre");
-		}
-	};
 		
 	//atributul id = de tip const => 
 	// nu poate fi modificat dupa atribuire => 
@@ -162,7 +155,7 @@ public:
 		}
 	};
 
-	void setPrajituri(string* prajituriNoi, int nrPrahituriNoi) { 
+	void setPrajituri(string* prajituriNoi, int nrPrahituriNoi) {
 		if (this->prajituri != nullptr) {
 			delete[] this->prajituri;
 		}
@@ -171,12 +164,56 @@ public:
 			for (int i = 0; i < nr PrajituriNoi; i++) {
 				this->prajituri[i] = prajituriNoi[i];
 			}
-		} else {
+		}
+		else {
 			this->prajituri = nullptr;
 		}
 		this->nrPrajituri = nrPrajituriNoi;
+	}
 
+
+	//6. Functii statice - getteri si setteri
+	static int getNrCofetarii() { return Cofetarie::nrCofetarii; }
+	static int getCodCaen() { return Cofetarie::codCaen };
+
+	void setNrCofetarii(int nr) {
+		if (nr > 0) {
+			Cofetarie::nrCofetarii = nr;
+		}
+		else {
+			throw std::invalid_arugment("Numarul cofetariilor nu poate fi mai mic de 1");
+		}
+	};
+
+	void setCodCaen(int cod) {
+		if (cod >= 1000) {
+			Cofetari::codCaen = cod;
+		}
+		else {
+			throw std::invalid_argument("Codul CAEN nu poate avea mai putin de 4 cifre");
+		}
+	};
+
+	//7. Alte functii
+	void afisare() const {
+		cout << "Cofetarie ID: " << id
+			<< "\nNume: " << nume
+			<< "\nAdministrator: " << administrator
+			<< "\nAdresa: " << adresa
+			<< "\nNr Prajituri: " << nrPrajituri
+			<< "\nPrajituri: ";
+		for (int i = 0; i < nrPrajituri; i++) {
+			cout << prajituri[i] << (i < nrPrajituri - 1 ? ", " : "");
+		}
+		cout << endl;
+	}
+
+	/////8. Functii friend
+	friend string getAdmin(Cofetarie c);
 };
+
+///////////////////////////////////////////////////////////
+
 
 class Angajat {
 	//1. Atribute
@@ -247,23 +284,13 @@ public:
 	}
 
 	//4. Getteri
-	static int getNrAngajati() { return Angajati::nrAngajati; };
 	const int getId() { return this->id; };
 	const long long getCNP() { return this->CNP; };
 	string getNume() { return this->nume; };
 	string getPrenume() { return this->prenume; };
 	char* getFunctie() { return this->functie; };
 
-//5. Setteri 
-	void setNrAngajati(int nr) {
-		if (nr > 0) {
-			Angajati::nrAngajati = nr;
-		}
-		else {
-			throw std::invalid_argument(
-				"numarul angajatilor trebuie sa fie de cel putin 1");
-		}
-	};
+	//5. Setteri 
 
 	//atributulele id si CNP = de tip const => 
 	// nu pot fi modificate dupa atribuire => 
@@ -300,6 +327,22 @@ public:
 		}
 	}
 
+	//6. Functii statice - getteri si setteri
+	static int getNrAngajati() { return Angajati::nrAngajati; };
+
+	void setNrAngajati(int nr) {
+		if (nr > 0) {
+			Angajati::nrAngajati = nr;
+		}
+		else {
+			throw std::invalid_argument(
+				"numarul angajatilor trebuie sa fie de cel putin 1");
+		}
+	};
+
+
+
+	// 7. Alte functii
 	static void afisareNrAngajati() {
 		cout << "Numarul angajatilor este: " <<
 			Angajat::nrAngajati << endl;
@@ -325,7 +368,12 @@ public:
 			<< "\nCNP: " << CNP << "\nFunctie: " << (functie ? functie : "Necunoscut") << endl;
 	}
 
+	/////8. Functii friend
+	friend string printFullName(Angajat a);
 };
+
+///////////////////////////////////////////////////////////
+
 
 class Prajitura {
 	//1. Atribute
@@ -409,7 +457,6 @@ public:
 	}
 
 	//4. Getteri
-	static int getNrPrajituri() { return this->nrPrajituri; };
 	const int getId() { return this->id; };
 	string getNume() { return this->nume; };
 	float getPret() { return this->pret; }
@@ -418,14 +465,6 @@ public:
 	int getNrBucati() { return this->nrBucati; };
 
 //5. Setteri 
-	void setNrPrajituri(int nr) {
-		if (nr < 1) {
-			throw std::invalid_argument("Numarul sortimentelor nu poate fi mai mic de 1");
-		}
-		else {
-			Prajitura::nrPrajituri = nr; 
-		}
-	};
 
 	//atributul id = de tip const => 
 	// nu poate fi modificat dupa atribuire => 
@@ -479,6 +518,21 @@ public:
 	};
 
 
+	//6. Functii statice - getteri si setteri
+	static int getNrPrajituri() { return Prahitura::nrPrajituri; };
+
+	void setNrPrajituri(int nr) {
+		if (nr < 1) {
+			throw std::invalid_argument("Numarul sortimentelor nu poate fi mai mic de 1");
+		}
+		else {
+			Prajitura::nrPrajituri = nr;
+		}
+	};
+
+
+	//7. Alte functii 
+
 	static void afisareNumarSortimente() {
 		cout << "Numarul de sortimente al cofetariei este: " <<
 			Prajitura::nrPrajituri << endl;
@@ -495,11 +549,15 @@ public:
 	}
 
 };
+///////////////////////////////////////////////////////////
 
 int Cofetarie::nrCofetarii = 0;
 int Cofetarie::codCaen = 4724;
 int Angajat::nrAngajati = 0;
 int Prajitura::nrPrajituri = 0;
+
+///////////////////////////////////////////////////////////
+
 
 int main() {
 
@@ -527,6 +585,29 @@ int main() {
 	prajitura1.afisare();
 	prajitura2.afisare();
 	prajitura3.afisare();
+
+	prajitura1.setIngrediente("Frisca", "Biscuiti", 2);
+	cout << prajitura1.getIngrediente() << endl;
+
+	prajitura1.setNrBucati(10);
+	cout << prajitura1.getNrBucati() << endl;
+
+	prajitura1.setNrPrajituri(5);
+	cout << prajitura1.getNrBucati() << endl;
+
+	prajitura1.setNume("Cea mai buna prajitura");
+	cout << prajitura1.getNume() << endl;
+
+	prajitura1.setPret(23.5);
+	cout << prajitura1.getPret() << endl;
+
+	prajitura1.setNrIngrediente(2);
+	cout << prajitura1.getNrIngrediente << endl;
+
+	
+
+		//TODO - test if program runs;
+	
 }
 
 

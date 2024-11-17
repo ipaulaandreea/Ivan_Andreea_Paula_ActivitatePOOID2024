@@ -36,10 +36,10 @@
 4. Pentru toate atributele trecute acum în zona privată a clasei realizați metode de acces la acestea:  
    - **Getteri** și **setteri**. ✅
 
-5. Pentru atributele statice realizați funcții statice pentru a oferi acces la acestea.  
+5. Pentru atributele statice realizați funcții statice pentru a oferi acces la acestea.  ✅
 
 6. Realizați două funcții globale care să realizeze anumite prelucrări/procesări (la alegere) și să folosească obiecte de tipul claselor implementate.  
-   - Cele două funcții vor fi prietene cu clasele ale căror obiecte sunt folosite, astfel încât să aibă acces la atributele private.  
+   - Cele două funcții vor fi prietene cu clasele ale căror obiecte sunt folosite, astfel încât să aibă acces la atributele private.  ✅
 
 7. În funcția `main`:
    - Apelați toate metodele și funcțiile implementate pentru a le testa.  
