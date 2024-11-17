@@ -10,10 +10,10 @@ using namespace std;
 class Cofetarie {
 
 private:
-	string nume;
-	const int id;
 	static int nrCofetarii;
 	static int codCaen;
+	const int id;
+	string nume;
 	string adresa;
 	string administrator;
 	string* prajituri;
@@ -74,6 +74,23 @@ public:
 		delete[] prajituri;
 	};
 
+	
+	/// Constructor de copiere
+	Cofetarie(const Cofetarie& c) : id(c.id) {
+		this->nrPrajituri = c.nrPrajituri;
+		if (c.prajituri != nullptr) {
+			this->prajituri = new string[c.nrPrajituri];
+			for (int i = 0; i < c.nrPrajituri; i++) {
+				this->prajituri[i] = c.prajituri[i];
+			}
+		else {
+			this->prajituri = nullptr;
+		}
+		this->nume = c.nume;
+		this->administrator = c.administrator;
+		this->adresa = c.adresa;
+	}
+
 	static void afisareCodCaen() {
 		cout << "Codul CAEN al cofetariei este: " <<
 			Cofetarie::codCaen << endl;
@@ -95,9 +112,9 @@ public:
 class Angajat {
 
 private:
+	static int nrAngajati;
 	const int id;
 	const long long CNP;
-	static int nrAngajati;
 	string nume;
 	string prenume;
 	char* functie;
@@ -142,6 +159,20 @@ public:
 		this->functie = nullptr;
 	};
 
+	/// Constructor de copiere
+	Angajat(const Angajat& a) : id(a.id), CNP(a.CNP) {
+		if (a.functie != nullptr) {
+			this->functie = new char[strlen(a.functie) + 1];
+			strcpy(this->functie, a.functie);
+		}
+		else {
+			this->functie = nullptr;
+		}
+
+		this->nume = a.nume;
+		this->prenume = a.prenume;
+	}
+
 	static void afisareNrAngajati() {
 		cout << "Numarul angajatilor este: " <<
 			Angajat::nrAngajati << endl;
@@ -171,8 +202,8 @@ public:
 
 class Prajitura {
 private:
-	const int id;
 	static int nrPrajituri;
+	const int id;
 	string nume;
 	float pret;
 	int nrIngrediente;
@@ -227,6 +258,24 @@ public:
 		this->nrBucati = nrBucati;
 		this->ingrediente = nullptr;
 	};
+
+	/// Constructor de copiere
+	Prajitura(const Prajitura& p) : id(p.id) {
+		this->nrIngrediente = p.nrIngrediente;
+		if (p.nrIngrediente != nullptr) {
+			this->ingrediente = new string[p.nrIngrediente];
+			for (int i = 0; i < p.nrIngrediente; i++) {
+				this->ingrediente[i] = p.ingrediente[i];
+			}
+		}
+		else {
+			this->ingrediente = nullptr;
+		}
+
+		this->nume = p.nume;
+		this->pret = p.pret;
+		this->nrBucati = p.nrBucati;
+	}
 
 
 
