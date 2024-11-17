@@ -288,7 +288,7 @@ public:
 		}
 		if (newFunctie != nullptr) {
 			this->functie = new char[strlen(newFunctie) + 1];
-			strcpy_s(this->functie, strlen(functie) + 1, functie);
+			strcpy_s(this->functie, strlen(functie) + 1, newFunctie);
 		}
 		else {
 			this->functie = nullptr;
