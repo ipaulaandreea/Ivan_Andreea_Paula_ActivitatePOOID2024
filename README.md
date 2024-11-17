@@ -41,7 +41,7 @@
 6. Realizați două funcții globale care să realizeze anumite prelucrări/procesări (la alegere) și să folosească obiecte de tipul claselor implementate.  
    - Cele două funcții vor fi prietene cu clasele ale căror obiecte sunt folosite, astfel încât să aibă acces la atributele private.  ✅
 
-7. În funcția `main`:
+7. În funcția `main`: ✅
    - Apelați toate metodele și funcțiile implementate pentru a le testa.  
    - Cu ajutorul get-erilor să afișați valorile atributelor.  
 

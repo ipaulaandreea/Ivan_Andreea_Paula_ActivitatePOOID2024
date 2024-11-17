@@ -9,7 +9,7 @@
 using namespace std;
 
 ///////////////////////////////////////////////////////////
-// 0. Zona globala - functii globale
+// 0. Functii globale
 string getAdmin(Cofetarie c) { return c.administrator; };
 
 void printFullName(Angajat a) {
@@ -104,13 +104,9 @@ public:
 		this->nume = c.nume;
 		this->administrator = c.administrator;
 		this->adresa = c.adresa;
+		}
 	}
 
-	static void afisareCodCaen() {
-		cout << "Codul CAEN al cofetariei este: " <<
-			Cofetarie::codCaen << endl;
-
-	}
 
 	void afisare() const {
 		cout << "Cofetarie ID: " << id << "\nNume: " << nume << "\nAdministrator: "
@@ -132,7 +128,6 @@ public:
 
 	//5. Setteri 
 
-		
 	//atributul id = de tip const => 
 	// nu poate fi modificat dupa atribuire => 
 	// nu putem declara setter pentru el;
@@ -206,6 +201,12 @@ public:
 			cout << prajituri[i] << (i < nrPrajituri - 1 ? ", " : "");
 		}
 		cout << endl;
+	}
+
+	static void afisareCodCaen() {
+		cout << "Codul CAEN al cofetariei este: " <<
+			Cofetarie::codCaen << endl;
+
 	}
 
 	/////8. Functii friend
@@ -573,7 +574,6 @@ int main() {
 	Prajitura prajitura2("Amandina", 15.5, 10);
 	Prajitura prajitura3("Foret Noir", 18.2, 3, new string[3]{ "Visine", "Zahar", "Oua" }, 6);
 
-	cout << "Hello world" << endl;
 	cofetarie1.afisare();
 	cofetarie2.afisare();
 	cofetarie3.afisare();
@@ -586,13 +586,30 @@ int main() {
 	prajitura2.afisare();
 	prajitura3.afisare();
 
+	//Getteri si setteri
+
+	cofetarie1.setAdministrator("New Admin");
+	cout << cofetarie1.getAdministrator() << endl;
+
+	cofetarie1.setAdresa("New Address");
+	cout << cofetarie1.getAdresa() << endl;
+
+	cofetarie1.setPrajituri("Amandine", "Ciocolata de casa", 2);
+	cout << cofetarie1.getPrajituri() << endl;
+
+	angajat1.setFunctie("Cofetar");
+	cout << angajat1.getFunctie() << endl;
+
+	angajat1.setNume("Matei");
+	cout << angajat1.getNume() << endl;
+
+	angajat1.setPrenume("Marius");
+	cout << angajat1.getPrenume() << endl;
+
 	prajitura1.setIngrediente("Frisca", "Biscuiti", 2);
 	cout << prajitura1.getIngrediente() << endl;
 
 	prajitura1.setNrBucati(10);
-	cout << prajitura1.getNrBucati() << endl;
-
-	prajitura1.setNrPrajituri(5);
 	cout << prajitura1.getNrBucati() << endl;
 
 	prajitura1.setNume("Cea mai buna prajitura");
@@ -604,7 +621,26 @@ int main() {
 	prajitura1.setNrIngrediente(2);
 	cout << prajitura1.getNrIngrediente << endl;
 
-	
+	//Metode statice
+
+	Cofetarie::setCodCaen(0000);
+	cout << Cofetarie::getCodCaen() << endl;
+
+	Cofetarie::setNrCofetarii(5);
+	cout << Cofetarie.getNrCofetarii() << endl;
+
+	Angajat::setNrAngajati(20);
+	cout << Angajat::getNrAngajati << endl;
+
+	Prajitura::setNrPrajituri(5);
+	cout << Prajitura::getNrBucati() << endl;
+
+	//Metode friend
+
+	cout << getAdmin(cofetarie2) << endl;
+	cout << printFullName(angajat3) << endl;
+
+
 
 		//TODO - test if program runs;
 	
