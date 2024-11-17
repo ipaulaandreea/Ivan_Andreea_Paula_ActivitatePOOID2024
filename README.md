@@ -26,22 +26,22 @@
 
 ---
 
-## Proiect - Faza 2  
+## Proiect - Faza 2  ✅
 1. Pentru clasele de la tema precedentă treceți atributele din zona publică a clasei în zona **privată**.  
 
 2. În cele trei clase trebuie să implementați destructorii astfel încât să ștergeți memoria alocată în HEAP.  
 
-3. Implementați constructorul de copiere pentru toate clasele.  ✅
+3. Implementați constructorul de copiere pentru toate clasele.  
 
 4. Pentru toate atributele trecute acum în zona privată a clasei realizați metode de acces la acestea:  
-   - **Getteri** și **setteri**. ✅
+   - **Getteri** și **setteri**. 
 
-5. Pentru atributele statice realizați funcții statice pentru a oferi acces la acestea.  ✅
+5. Pentru atributele statice realizați funcții statice pentru a oferi acces la acestea.  
 
 6. Realizați două funcții globale care să realizeze anumite prelucrări/procesări (la alegere) și să folosească obiecte de tipul claselor implementate.  
-   - Cele două funcții vor fi prietene cu clasele ale căror obiecte sunt folosite, astfel încât să aibă acces la atributele private.  ✅
+   - Cele două funcții vor fi prietene cu clasele ale căror obiecte sunt folosite, astfel încât să aibă acces la atributele private.  
 
-7. În funcția `main`: ✅
+7. În funcția `main`: 
    - Apelați toate metodele și funcțiile implementate pentru a le testa.  
    - Cu ajutorul get-erilor să afișați valorile atributelor.  
 
