@@ -60,7 +60,6 @@ public:
 		for (int i = 0; i < nrPrajituri; i++) {
 			this->prajituri[i] = prajituri[i];
 		};
-		delete[] prajituri;
 	}
 
 	Cofetarie(
@@ -77,7 +76,6 @@ public:
 		for (int i = 0; i < nrPrajituri; i++) {
 			this->prajituri[i] = prajituri[i];
 		};
-		delete[] prajituri;
 	};
 
 
@@ -197,29 +195,32 @@ public:
 			// - implementarea functiei operator>: in zona globala
 		Cofetarie& operator=(const Cofetarie& c) {
 			if (this != &c) {
-				delete[] this->prajituri;
+				if (this->prajituri) {
+					delete[] this->prajituri;
+				}
 				this->nume = c.nume;
 				this->adresa = c.adresa;
 				this->administrator = c.administrator;
 				this->nrPrajituri = c.nrPrajituri;
-				this->prajituri = new string[this->nrPrajituri];
-				for (int i = 0; i < nrPrajituri; i++) {
+				string* prajituri = new string[c.nrPrajituri];
+				for (int i = 0; i < c.nrPrajituri; i++) {
 					prajituri[i] = c.prajituri[i];
 				}
+				this->prajituri = prajituri;
 			}
 			return *this;
 		}
 
-		ostream& operator<<(
-			ostream& oStream,
+		friend ostream& operator<<(
+			ostream& oStream, 
 			const Cofetarie& c) {
 			oStream << "ID: " << c.id << ", "
 				<< "Nume: " << c.nume << ", "
 				<< "Adresa: " << c.adresa << ", "
 				<< "Administrator " << c.administrator << ", "
-				<< "Prajituri: " << ;
+				<< "Prajituri: " << endl;
 			if (c.nrPrajituri > 0) {
-				for (int i = 0; i < c.nrPrajituri; c++) {
+				for (int i = 0; i < c.nrPrajituri; i++) {
 					oStream << c.prajituri[i];
 					if (i < c.nrPrajituri - 1) {
 						oStream << ", ";
@@ -236,7 +237,7 @@ public:
 
 		friend bool operator>(const Cofetarie& c1, const Cofetarie& c2);
 
-		bool operator!=(const Cofetarie& c1, const Cofetarie& c2) {
+		friend bool operator!=(const Cofetarie& c1, const Cofetarie& c2) {
 			return c1.nume != c2.nume;
 		}
 		
@@ -258,7 +259,6 @@ public:
 		~Angajat() {
 			if (this->functie != nullptr) {
 				delete[] this->functie;
-				this->functie = nullptr;
 			}
 		}
 
@@ -385,32 +385,24 @@ public:
 	friend void printFullName(Angajat a);
 
 	/////9. Supraincarcare operatori
-	static int nrAngajati;
-	const int id;
-	const long long CNP;
-	string nume;
-	string prenume;
-	char* functie;
-
 	Angajat& operator=(const Angajat& a) {
 		if (this != &a) {
 			delete[] this->functie;
 			this->nume = a.nume;
 			this->prenume = a.prenume;
-			this->functie = new char[strlen(a.functie)+1];
+			this->functie = new char[strlen(a.functie) + 1];
 			strcpy_s(this->functie, strlen(a.functie), a.functie);
-			}
-		}
+		};
 	return *this;
 	};
 
-	bool operator== (const Angajat& a1, const Angajat& a2) {
+	friend bool operator== (const Angajat& a1, const Angajat& a2) {
 		return a1.CNP == a2.CNP;
 	};
 
-	friend int operator% (const Angajat& a);
+	friend int operator% (const Angajat& a, int x);
 
-	ostream& operator<<(ostream& oStream, const Angajat& a) {
+	friend ostream& operator<<(ostream& oStream, const Angajat& a) {
 		oStream << a.id << "; "
 			<< a.CNP << "; "
 			<< a.nume << "; "
@@ -577,7 +569,20 @@ public:
 	}
 
 	/////9. Supraincarcare operatori
-	friend Prajitura& operator=(Prajitura& p1, const Prajitura& p2);
+	Prajitura& operator=(const Prajitura& p) {
+		if (this != &p) {
+			delete[] this->ingrediente;
+
+			this->nume = p.nume;
+			this->pret = p.pret;
+			this->nrIngrediente = p.nrIngrediente;
+			this->ingrediente = new string[p.nrIngrediente];
+			for (int i = 0; i < p.nrIngrediente; ++i) {
+				this->ingrediente[i] = p.ingrediente[i];
+			}
+		}
+		return *this;
+	}
 
 	operator float() const {
 		return this->pret;
@@ -585,17 +590,18 @@ public:
 
 	friend bool operator>(const Prajitura& p1, const Prajitura& p2);
 
-	ostream& operator<<(ostream oStream, const Prajitura& p) {
+	friend ostream& operator<<(ostream& oStream, const Prajitura& p) {
 		oStream << "*Nume*" << p.nume << endl;
 		oStream << "**Pret**" << p.pret << endl;
-		oStream << "***Bucati***" << p.bucati << endl;
+		oStream << "***Bucati***" << p.nrBucati << endl;
 		oStream << "****Ingregiente****" << endl;
 		if (p.ingrediente != nullptr) {
-			for (int i = 0; i<p.numarIngreiente; i++){
-				oStream << p.ingrediente[i] << "; "
+			for (int i = 0; i < p.nrIngrediente; i++) {
+				oStream << p.ingrediente[i] << "; ";
+			}
 		}
 		else {
-			oSteam << "Nothing to show:(";
+			oStream << "Nothing to show:(";
 		}
 		return oStream;
 	}
@@ -607,12 +613,12 @@ public:
 // Functii globale
 string getAdmin(Cofetarie c) { return c.administrator; };
 
-bool operator>(const Cofetarie& c1, const Cofetarie& c2) { 
-	return strlen(c1.administrator) > strlen(c2.administrator);
+bool operator>(Cofetarie& c1, Cofetarie& c2) { 
+	return c1.getAdministrator().length() > c2.getAdministrator().length();
 }
 
-int operator%(const Angajat& a) {
-	return strlen(a.nume) % 2;
+int operator%(Angajat& a, int x) {
+	return a.getNume().length() % x;
 }
 
 void printFullName(Angajat a) {
@@ -620,23 +626,9 @@ void printFullName(Angajat a) {
 	cout << fullName << endl;
 };
 
-//I wanted to test out writing overloading assignment operator logic outside class definition
-Prajitura& operator=(Prajitura& p1, const Prajitura& p2) {
-	if (&p1 != &p2) {
-		p1.setNume(p2.getNume());
-		p1.setPret(p2.getPret());
-		p1.setNrIngrediente(p2.getNrIngrediente());
 
-		delete[] p1.ingrediente;
-		p1.ingrediente = new string[p2.getNrIngrediente()];
-		for (int i = 0; i < p2.getNrIngrediente(); ++i) {
-			p1.ingrediente[i] = p2.getIngrediente()[i]; 
-		}
-	}
-	return p1;
-}
 
-bool operator>(const Prajitura& p1, const Prajitura& p2) {
+bool operator>(Prajitura& p1, Prajitura& p2) {
 	return p1.getPret() > p2.getPret();
 }
 
@@ -739,6 +731,60 @@ int main() {
 	//// Methode friend
 	cout << getAdmin(cofetarie2) << endl;
 	printFullName(angajat3);
+
+	///Operatori
+	//Cofetarie:
+	//1. operatorul = 
+	Cofetarie cofetarie4 = cofetarie3;
+
+	//2. operatorul <<
+	cout << cofetarie4 << endl;
+
+	//3. operatorul >
+	bool rez1 = cofetarie4 > cofetarie1;
+	cout << rez1;
+
+	//4. operatorul !=
+	bool rez2 = cofetarie4 != cofetarie3;
+	cout << rez2;
+	bool rez3 = cofetarie4 != cofetarie2;
+	cout << rez3;
+
+	////////////
+
+	//Angajat:
+		//1. operatorul = 
+	Angajat angajat4 = angajat3;
+
+		//2. operatorul <<
+	cout << angajat4 << endl;
+
+		//3. operatorul %
+	bool rez4 = angajat4%2;
+	cout << rez4;
+
+		//4. operatorul ==
+	bool rez5 = angajat4 == angajat3;
+	cout << rez5;
+	bool rez6 = angajat4 == angajat1;
+	cout << rez6;
+	
+
+	//Prajitura:
+		//1. operatorul =
+	Prajitura prajitura4 = prajitura3;
+
+		//2. operatorul <<
+	cout << prajitura4 << endl;
+
+		//3. operatorul >
+	int rez7 = prajitura4 > prajitura1; 
+	cout << rez7;
+
+		//4. operatorul float()
+	cout << (float)prajitura4;
+
+
 
 	return 0;
 }
