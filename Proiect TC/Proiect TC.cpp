@@ -195,18 +195,22 @@ public:
 			// - implementarea functiei operator>: in zona globala
 		Cofetarie& operator=(const Cofetarie& c) {
 			if (this != &c) {
-				if (this->prajituri) {
-					delete[] this->prajituri;
-				}
+				delete[] this->prajituri;
+
 				this->nume = c.nume;
 				this->adresa = c.adresa;
 				this->administrator = c.administrator;
 				this->nrPrajituri = c.nrPrajituri;
-				string* prajituri = new string[c.nrPrajituri];
-				for (int i = 0; i < c.nrPrajituri; i++) {
-					prajituri[i] = c.prajituri[i];
+
+				if (c.nrPrajituri > 0) {
+					this->prajituri = new string[c.nrPrajituri];
+					for (int i = 0; i < c.nrPrajituri; i++) {
+						this->prajituri[i] = c.prajituri[i];
+					}
 				}
-				this->prajituri = prajituri;
+				else {
+					this->prajituri = nullptr;
+				}
 			}
 			return *this;
 		}
@@ -257,9 +261,7 @@ public:
 	public:
 		// 1. Destructor
 		~Angajat() {
-			if (this->functie != nullptr) {
-				delete[] this->functie;
-			}
+
 		}
 
 		// 2. Constructori
@@ -657,17 +659,17 @@ int main() {
 	Prajitura prajitura2("Amandina", 15.5, 10);
 	Prajitura prajitura3("Foret Noir", 18.2, 3, new string[3]{ "Visine", "Zahar", "Oua" }, 6);
 
-	cofetarie1.afisare();
-	cofetarie2.afisare();
-	cofetarie3.afisare();
+	//cofetarie1.afisare();
+	//cofetarie2.afisare();
+	//cofetarie3.afisare();
 
-	angajat1.afisare();
-	angajat2.afisare();
-	angajat3.afisare();
+	//angajat1.afisare();
+	//angajat2.afisare();
+	//angajat3.afisare();
 
-	prajitura1.afisare();
-	prajitura2.afisare();
-	prajitura3.afisare();
+	//prajitura1.afisare();
+	//prajitura2.afisare();
+	//prajitura3.afisare();
 
 	 //Getteri si setteri
 	cofetarie1.setAdministrator("New Admin");
@@ -742,13 +744,13 @@ int main() {
 
 	//3. operatorul >
 	bool rez1 = cofetarie4 > cofetarie1;
-	cout << rez1;
+	cout << rez1 << endl;
 
 	//4. operatorul !=
 	bool rez2 = cofetarie4 != cofetarie3;
-	cout << rez2;
+	cout << rez2 << endl;
 	bool rez3 = cofetarie4 != cofetarie2;
-	cout << rez3;
+	cout << rez3 << endl;
 
 	////////////
 
@@ -761,13 +763,13 @@ int main() {
 
 		//3. operatorul %
 	bool rez4 = angajat4%2;
-	cout << rez4;
+	cout << rez4 << endl;
 
 		//4. operatorul ==
 	bool rez5 = angajat4 == angajat3;
-	cout << rez5;
+	cout << rez5 << endl;
 	bool rez6 = angajat4 == angajat1;
-	cout << rez6;
+	cout << rez6 << endl;
 	
 
 	//Prajitura:
@@ -779,10 +781,10 @@ int main() {
 
 		//3. operatorul >
 	int rez7 = prajitura4 > prajitura1; 
-	cout << rez7;
+	cout << rez7 << endl;
 
 		//4. operatorul float()
-	cout << (float)prajitura4;
+	cout << (float)prajitura4 << endl;
 
 
 
