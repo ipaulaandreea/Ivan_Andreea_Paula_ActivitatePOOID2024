@@ -210,7 +210,7 @@ public:
 			return *this;
 		}
 
-		friend ostream& operator<<(
+		ostream& operator<<(
 			ostream& oStream,
 			const Cofetarie& c) {
 			oStream << "ID: " << c.id << ", "
@@ -236,7 +236,7 @@ public:
 
 		friend bool operator>(const Cofetarie& c1, const Cofetarie& c2);
 
-		friend bool operator!=(const Cofetarie& c1, const Cofetarie& c2) {
+		bool operator!=(const Cofetarie& c1, const Cofetarie& c2) {
 			return c1.nume != c2.nume;
 		}
 		
@@ -385,7 +385,44 @@ public:
 	friend void printFullName(Angajat a);
 
 	/////9. Supraincarcare operatori
+	static int nrAngajati;
+	const int id;
+	const long long CNP;
+	string nume;
+	string prenume;
+	char* functie;
 
+	Angajat& operator=(const Angajat& a) {
+		if (this != &a) {
+			delete[] this->functie;
+			this->nume = a.nume;
+			this->prenume = a.prenume;
+			this->functie = new char[strlen(a.functie)+1];
+			strcpy_s(this->functie, strlen(a.functie), a.functie);
+			}
+		}
+	return *this;
+	};
+
+	bool operator== (const Angajat& a1, const Angajat& a2) {
+		return a1.CNP == a2.CNP;
+	};
+
+	friend int operator% (const Angajat& a);
+
+	ostream& operator<<(ostream& oStream, const Angajat& a) {
+		oStream << a.id << "; "
+			<< a.CNP << "; "
+			<< a.nume << "; "
+			<< a.prenume << "; ";
+		if (a.functie != nullptr) {
+			oStream << a.functie << "; ";
+		}
+		else {
+			oStream << "Functie necunoscuta";
+		}
+		return oStream;
+	};
 };
 
 ///////////////////////////////////////////////////////////
@@ -538,6 +575,32 @@ public:
 		}
 		cout << "\nNr Bucati: " << nrBucati << endl;
 	}
+
+	/////9. Supraincarcare operatori
+	friend Prajitura& operator=(Prajitura& p1, const Prajitura& p2);
+
+	operator float() const {
+		return this->pret;
+	}
+
+	friend bool operator>(const Prajitura& p1, const Prajitura& p2);
+
+	ostream& operator<<(ostream oStream, const Prajitura& p) {
+		oStream << "*Nume*" << p.nume << endl;
+		oStream << "**Pret**" << p.pret << endl;
+		oStream << "***Bucati***" << p.bucati << endl;
+		oStream << "****Ingregiente****" << endl;
+		if (p.ingrediente != nullptr) {
+			for (int i = 0; i<p.numarIngreiente; i++){
+				oStream << p.ingrediente[i] << "; "
+		}
+		else {
+			oSteam << "Nothing to show:(";
+		}
+		return oStream;
+	}
+
+
 };
 
 ///////////////////////////////////////////////////////////
@@ -545,12 +608,39 @@ public:
 string getAdmin(Cofetarie c) { return c.administrator; };
 
 bool operator>(const Cofetarie& c1, const Cofetarie& c2) { 
-	return  }
+	return strlen(c1.administrator) > strlen(c2.administrator);
+}
+
+int operator%(const Angajat& a) {
+	return strlen(a.nume) % 2;
+}
 
 void printFullName(Angajat a) {
 	string fullName = a.nume + " " + a.prenume;
 	cout << fullName << endl;
 };
+
+//I wanted to test out writing overloading assignment operator logic outside class definition
+Prajitura& operator=(Prajitura& p1, const Prajitura& p2) {
+	if (&p1 != &p2) {
+		p1.setNume(p2.getNume());
+		p1.setPret(p2.getPret());
+		p1.setNrIngrediente(p2.getNrIngrediente());
+
+		delete[] p1.ingrediente;
+		p1.ingrediente = new string[p2.getNrIngrediente()];
+		for (int i = 0; i < p2.getNrIngrediente(); ++i) {
+			p1.ingrediente[i] = p2.getIngrediente()[i]; 
+		}
+	}
+	return p1;
+}
+
+bool operator>(const Prajitura& p1, const Prajitura& p2) {
+	return p1.getPret() > p2.getPret();
+}
+
+
 ///////////////////////////////////////////////////////////
 //Atribute statice
 
@@ -587,7 +677,7 @@ int main() {
 	prajitura2.afisare();
 	prajitura3.afisare();
 
-	 //Getters and Setters
+	 //Getteri si setteri
 	cofetarie1.setAdministrator("New Admin");
 	cout << cofetarie1.getAdministrator() << endl;
 
@@ -631,7 +721,7 @@ int main() {
 	cout << prajitura1.getNrIngrediente() << endl;
 
 
-	//// Static methods
+	//// Metode statice
 
 	Cofetarie::setCodCaen(1234); 
 	cout << "Cod CAEN: " << Cofetarie::getCodCaen() << endl;
@@ -646,7 +736,7 @@ int main() {
 	cout << Prajitura::getNrPrajituri() << endl;
 
 
-	//// Friend methods
+	//// Methode friend
 	cout << getAdmin(cofetarie2) << endl;
 	printFullName(angajat3);
 
