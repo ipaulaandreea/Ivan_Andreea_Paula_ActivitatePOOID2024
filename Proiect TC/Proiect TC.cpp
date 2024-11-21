@@ -191,6 +191,55 @@ public:
 
 		/////8. Functii friend
 		friend string getAdmin(Cofetarie c);
+
+
+		/////9. Supraincarcare operatori
+			// - implementarea functiei operator>: in zona globala
+		Cofetarie& operator=(const Cofetarie& c) {
+			if (this != &c) {
+				delete[] this->prajituri;
+				this->nume = c.nume;
+				this->adresa = c.adresa;
+				this->administrator = c.administrator;
+				this->nrPrajituri = c.nrPrajituri;
+				this->prajituri = new string[this->nrPrajituri];
+				for (int i = 0; i < nrPrajituri; i++) {
+					prajituri[i] = c.prajituri[i];
+				}
+			}
+			return *this;
+		}
+
+		friend ostream& operator<<(
+			ostream& oStream,
+			const Cofetarie& c) {
+			oStream << "ID: " << c.id << ", "
+				<< "Nume: " << c.nume << ", "
+				<< "Adresa: " << c.adresa << ", "
+				<< "Administrator " << c.administrator << ", "
+				<< "Prajituri: " << ;
+			if (c.nrPrajituri > 0) {
+				for (int i = 0; i < c.nrPrajituri; c++) {
+					oStream << c.prajituri[i];
+					if (i < c.nrPrajituri - 1) {
+						oStream << ", ";
+					}
+				}
+			}
+			else {
+				oStream << "Fara prajituri";
+			}
+
+			return oStream;
+
+		}
+
+		friend bool operator>(const Cofetarie& c1, const Cofetarie& c2);
+
+		friend bool operator!=(const Cofetarie& c1, const Cofetarie& c2) {
+			return c1.nume != c2.nume;
+		}
+		
 	};
 
 
@@ -334,6 +383,9 @@ public:
 
 	/////8. Functii friend
 	friend void printFullName(Angajat a);
+
+	/////9. Supraincarcare operatori
+
 };
 
 ///////////////////////////////////////////////////////////
@@ -491,6 +543,9 @@ public:
 ///////////////////////////////////////////////////////////
 // Functii globale
 string getAdmin(Cofetarie c) { return c.administrator; };
+
+bool operator>(const Cofetarie& c1, const Cofetarie& c2) { 
+	return  }
 
 void printFullName(Angajat a) {
 	string fullName = a.nume + " " + a.prenume;
