@@ -47,12 +47,12 @@
 
 ---
 
-## Proiect - Faza 3  
+## Proiect - Faza 3   ✅ 
 1. Pentru clasele de la tema precedentă:  
-   - Supraincarcați operatorul `=` (de atribuire).  ✅
-   - Supraincarcați cel puțin alți **3 operatori** (câte 4 operatori pentru fiecare clasă).  ✅
+   - Supraincarcați operatorul `=` (de atribuire).  
+   - Supraincarcați cel puțin alți **3 operatori** (câte 4 operatori pentru fiecare clasă).  
 
-2. Creați cel puțin **o funcție prietenă** în proiect. ✅ 
+2. Creați cel puțin **o funcție prietenă** în proiect. 
 
 3. În funcția `main`:  
    - Apelați atât funcția prietenă, cât și cei **12 operatori** implementați.  
