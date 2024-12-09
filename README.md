@@ -60,7 +60,7 @@
 
 ---
 
-## Proiect - Faza 4  
+## Proiect - Faza 4    ✅ 
 1. Pentru clasele din proiect creați în funcția `main` **3 vectori**:  
    - Un vector cu obiecte de tipul primei clase.  
    - Un vector cu obiecte de al doilea tip.  

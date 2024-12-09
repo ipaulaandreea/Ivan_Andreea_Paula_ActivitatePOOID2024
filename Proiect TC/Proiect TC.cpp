@@ -5,6 +5,10 @@
 #include <iostream>
 #include <stdexcept> 
 #include <cstring>
+#include <vector>
+#include <sstream>
+
+
 
 using namespace std;
 
@@ -239,12 +243,39 @@ public:
 
 		}
 
+		friend std::istream& operator>>(std::istream& in, Cofetarie& c) {
+			std::cout << "Introduceti numele cofetariei: ";
+			in.ignore();
+			std::getline(in, c.nume);
+
+			std::cout << "Introduceti adresa cofetariei: ";
+			std::getline(in, c.adresa);
+
+			std::cout << "Introduceti numele administratorului: ";
+			std::getline(in, c.administrator);
+
+			std::cout << "Introduceti numarul de prajituri: ";
+			in >> c.nrPrajituri;
+
+			delete[] c.prajituri;
+			c.prajituri = new std::string[c.nrPrajituri];
+
+			in.ignore();
+			for (int i = 0; i < c.nrPrajituri; ++i) {
+				std::cout << "Introduceti numele prajiturii " << i + 1 << ": ";
+				std::getline(in, c.prajituri[i]);
+			}
+
+			return in;
+		}
+
 		friend bool operator>(const Cofetarie& c1, const Cofetarie& c2);
 
 		friend bool operator!=(const Cofetarie& c1, const Cofetarie& c2) {
 			return c1.nume != c2.nume;
 		}
 		
+
 	};
 
 
@@ -417,6 +448,39 @@ public:
 		}
 		return oStream;
 	};
+
+	friend istream& operator>>(istream& in, Angajat& a) {
+		
+		cout << "Introduceti numele angajatului: ";
+		in >> a.nume;
+		cout << "Introduceti prenumele angajatului: ";
+		in >> a.prenume;
+
+		//cout << "Introduceti CNP-ul angajatului: ";
+		//string cnpStr;
+		//in >> cnpStr;
+
+		//stringstream ss(cnpStr);
+		//long long cnp;
+		//ss >> cnp;
+		//if (ss.fail()) {
+		//	cerr << "Forma CNP invalid!" << endl;
+		//	return in;
+		//}
+		//a.CNP = cnp;
+
+		cout << "Introduceti functia angajtului: ";
+		string tempFunctie;
+		in >> tempFunctie;
+		a.functie = new char[tempFunctie.length() + 1];
+		strcpy_s(a.functie, tempFunctie.length() + 1, tempFunctie.c_str());
+
+
+
+		return in;
+	}
+
+
 };
 
 ///////////////////////////////////////////////////////////
@@ -608,6 +672,31 @@ public:
 		return oStream;
 	}
 
+	friend istream& operator>>(istream& in, Prajitura& prajitura) {
+		cout << "Introduceti numele prajiturii: ";
+		in >> prajitura.nume;
+
+		cout << "Introduceti pretul prajiturii: ";
+		in >> prajitura.pret;
+
+		cout << "Introduceti numarul ingredientelor prajiturii: ";
+		in >> prajitura.nrIngrediente;
+
+		prajitura.ingrediente = new string[prajitura.nrIngrediente];
+
+		cout << "Introduceti ingredientele:" << endl;
+		in.ignore();
+		for (int i = 0; i < prajitura.nrIngrediente; i++) {
+			cout << "Ingredient " << i + 1 << ": ";
+			getline(in, prajitura.ingrediente[i]);
+		}
+
+		cout << "Introduceti numarul de bucati: ";
+		in >> prajitura.nrBucati;
+
+		return in;
+	}
+
 
 };
 
@@ -647,6 +736,7 @@ int Prajitura::nrPrajituri = 0;
 
 
 int main() {
+
 	Cofetarie cofetarie1;
 	Cofetarie cofetarie2("Adresa 1", new string[3]{ "Amandina", "Savarina", "Tort diplomat" }, 3);
 	Cofetarie cofetarie3("Adresa 2", new string[2]{ "Tiramisu", "Dobos" }, 2, "Popescu Ion");
@@ -659,17 +749,6 @@ int main() {
 	Prajitura prajitura2("Amandina", 15.5, 10);
 	Prajitura prajitura3("Foret Noir", 18.2, 3, new string[3]{ "Visine", "Zahar", "Oua" }, 6);
 
-	//cofetarie1.afisare();
-	//cofetarie2.afisare();
-	//cofetarie3.afisare();
-
-	//angajat1.afisare();
-	//angajat2.afisare();
-	//angajat3.afisare();
-
-	//prajitura1.afisare();
-	//prajitura2.afisare();
-	//prajitura3.afisare();
 
 	 //Getteri si setteri
 	cofetarie1.setAdministrator("New Admin");
@@ -786,6 +865,71 @@ int main() {
 		//4. operatorul float()
 	cout << (float)prajitura4 << endl;
 
+
+	vector<Cofetarie> vectorCofetarii;
+	vector<Angajat> vectorAngajati;
+	vector<Prajitura> vectorPrajituri;
+
+	int n;
+	cout << "Introduceti numarul de cofetarii pe care le veti introduce: ";
+	cin >> n;
+	cin.ignore();
+	vectorCofetarii.resize(n);
+	for (int i = 0; i < n; ++i) {
+		cout << "Introduceti detaliile cofetariei " << i + 1 << ":\n";
+		cin >> vectorCofetarii[i];
+	}
+
+	int m;
+	cout << "Introduceti numarul de angajati pe care ii veti introduce: ";
+	cin >> m;
+	cin.ignore();
+	vectorAngajati.resize(m);
+	for (int i = 0; i < m; ++i) {
+		cout << "Introduceti detaliile angajatului " << i + 1 << ":\n";
+		cin >> vectorAngajati[i];
+	}
+
+	int p;
+	cout << "Introduceti numarul de prajituri pe care le veti introduce: ";
+	cin >> p;
+	cin.ignore();
+	vectorPrajituri.resize(p);
+	for (int i = 0; i < p; ++i) {
+		cout << "Introduceti detaliile prajiturii " << i + 1 << ":\n";
+		cin >> vectorPrajituri[i];
+	}
+
+	for (int i = 0; i < m; i++) {
+		cout << vectorCofetarii[i];
+	}
+
+	for (int i = 0; i < n; i++) {
+		cout << vectorAngajati[i];
+	}
+
+	for (int i = 0; i < p; i++) {
+		cout << vectorPrajituri[i];
+	}
+
+	int rows = 2;
+	int cols = 2;
+
+	vector<vector<Prajitura>> matricePrajituri(rows, vector<Prajitura>(cols));
+
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			cout << "\nIntroduceti detalii pentru prajitura de pe randul" << i + 1 << "si coloana " << j + 1 << ":\n";
+				cin >> matricePrajituri[i][j];
+		}
+	}
+
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			cout << "\nPrajitura rand " << i + 1 << " coloana " << j + 1 << ":\n";
+			cout << matricePrajituri[i][j] << endl;
+		}
+	}
 
 
 	return 0;
