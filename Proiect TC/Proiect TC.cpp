@@ -453,28 +453,15 @@ public:
 		
 		cout << "Introduceti numele angajatului: ";
 		in >> a.nume;
+
 		cout << "Introduceti prenumele angajatului: ";
 		in >> a.prenume;
-
-		//cout << "Introduceti CNP-ul angajatului: ";
-		//string cnpStr;
-		//in >> cnpStr;
-
-		//stringstream ss(cnpStr);
-		//long long cnp;
-		//ss >> cnp;
-		//if (ss.fail()) {
-		//	cerr << "Forma CNP invalid!" << endl;
-		//	return in;
-		//}
-		//a.CNP = cnp;
 
 		cout << "Introduceti functia angajtului: ";
 		string tempFunctie;
 		in >> tempFunctie;
 		a.functie = new char[tempFunctie.length() + 1];
 		strcpy_s(a.functie, tempFunctie.length() + 1, tempFunctie.c_str());
-
 
 
 		return in;
