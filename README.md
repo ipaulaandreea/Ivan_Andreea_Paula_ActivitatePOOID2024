@@ -77,7 +77,7 @@
 
 ---
 
-## Proiect - Faza 5  
+## Proiect - Faza 5   ✅ 
 1. Realizați o nouă clasă în proiect care să aibă cel puțin un atribut de tipul uneia dintre clasele deja implementate (relație de **has-a**):  
    - Atributul poate fi un simplu obiect, un pointer, un vector de obiecte sau un vector de pointeri.  
 

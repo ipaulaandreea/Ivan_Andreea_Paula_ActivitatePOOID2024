@@ -687,6 +687,120 @@ public:
 
 };
 
+class PlatouPrajituri {
+private:
+	static int nrPlatouri;
+	int id;
+	string nume;
+	Prajitura* prajituri;
+	int nrPrajituri;
+
+public:
+	~PlatouPrajituri() {
+		if (this->prajituri != nullptr) {
+			delete[] this->prajituri;
+		}
+		nrPlatouri--;
+	}
+	PlatouPrajituri()
+		: id(++nrPlatouri), nume("Platou Necunoscut"), prajituri(nullptr), nrPrajituri(0) {
+	}
+
+	PlatouPrajituri(string nume, int nrSortimentePrajituri, Prajitura* prajituriPtPlatou) {
+		this->id = ++nrPlatouri;
+		this->nume = nume;
+		this->nrPrajituri = nrSortimentePrajituri;
+		if (this->nrPrajituri > 0 && this->prajituri != nullptr) {
+			this->prajituri = new Prajitura[nrSortimentePrajituri];
+			for (int i = 0; i < nrSortimentePrajituri; i++) {
+				this->prajituri[i] = prajituriPtPlatou[i];
+			}
+		}
+		else {
+			this->prajituri = nullptr;
+		}
+
+	};
+
+	int getId() {
+		return this->id;
+	}
+	string getNume() {
+		return this->nume;
+	}
+
+	int getNrPrajituri() {
+		return this->nrPrajituri;
+	}
+
+	Prajitura* getPrajituri() {
+		return this->prajituri;
+	}
+
+	void setId(int newId) {
+		this->id = newId;
+	}
+	void setNume(string newName) {
+		this->nume = newName;
+	}
+
+	void setNrPrajituri(int newNr) {
+		this->nrPrajituri = newNr;
+	}
+
+	void setPrajituri(Prajitura* newPrajituri, int newNr) {
+		if (this->nrPrajituri > 0 && this->prajituri != nullptr) {
+			this->prajituri = new Prajitura[newNr];
+			for (int i = 0; i < newNr; i++) {
+				this->prajituri[i] = newPrajituri[i];
+			}
+		}
+	}
+
+	friend std::ostream& operator<<(std::ostream& out, const PlatouPrajituri& pp) { 
+		out << pp.id << endl;
+		out << pp.nume << endl;
+		if (pp.nrPrajituri > 0 && pp.prajituri != nullptr) {
+
+			for (int i = 0; i < pp.nrPrajituri; i++) {
+				out << pp.prajituri[i] << endl;
+
+			}
+		}
+		else {
+			out << "Platou gol" << endl;
+		}
+
+
+
+};
+	friend int operator>(const PlatouPrajituri& p1, const PlatouPrajituri& p2) {
+		return p1.nrPrajituri > p2.nrPrajituri;
+	}
+
+	friend std::istream& operator>>(std::istream& in, PlatouPrajituri& pp);
+};
+
+std::istream& operator>>(std::istream& in, PlatouPrajituri& pp) {
+	in >> pp.nume;
+	in >> pp.nrPrajituri;
+
+	if (pp.prajituri != nullptr) {
+		delete[] pp.prajituri;
+		pp.prajituri = nullptr;
+	}
+
+	if (pp.nrPrajituri > 0) {
+		pp.prajituri = new Prajitura[pp.nrPrajituri];
+
+		for (int i = 0; i < pp.nrPrajituri; i++) {
+			in >> pp.prajituri[i];
+		}
+	}
+	return in;
+
+};
+
 ///////////////////////////////////////////////////////////
 // Functii globale
 string getAdmin(Cofetarie c) { return c.administrator; };
@@ -718,6 +832,8 @@ int Cofetarie::nrCofetarii = 0;
 int Cofetarie::codCaen = 4724;
 int Angajat::nrAngajati = 0;
 int Prajitura::nrPrajituri = 0;
+int PlatouPrajituri::nrPlatouri = 0;
+
 
 ///////////////////////////////////////////////////////////
 
@@ -906,7 +1022,7 @@ int main() {
 
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
-			cout << "\nIntroduceti detalii pentru prajitura de pe randul" << i + 1 << "si coloana " << j + 1 << ":\n";
+			cout << "\nIntroduceti detalii pentru prajitura de pe randul " << i + 1 << " si coloana " << j + 1 << ":\n";
 				cin >> matricePrajituri[i][j];
 		}
 	}
