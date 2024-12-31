@@ -7,6 +7,7 @@
 #include <cstring>
 #include <vector>
 #include <sstream>
+#include <fstream> 
 
 
 
@@ -219,7 +220,48 @@ public:
 			return *this;
 		}
 
-		friend ostream& operator<<(
+		friend void operator<<(std::ostream& out, const Cofetarie& c) {
+			out << c.id << std::endl;
+			out << c.nume << std::endl;
+			out << c.adresa << std::endl;
+			out << c.administrator << std::endl;
+
+			out << c.nrPrajituri << std::endl;
+
+			for (int i = 0; i < c.nrPrajituri; ++i) {
+				out << c.prajituri[i] << std::endl;
+			}
+		}
+
+		friend ifstream& operator>>(ifstream& file, Cofetarie& c) {
+			int tempId;
+			file >> tempId;
+			if (file) {
+				const_cast<int&>(c.id) = tempId;
+			}
+
+			file >> c.nume;
+			file >> c.adresa;
+			file >> c.administrator;
+			file >> c.nrPrajituri;
+
+			if (c.prajituri != nullptr) {
+				delete[] c.prajituri;
+				c.prajituri = nullptr;
+			}
+
+
+			c.prajituri = new string[c.nrPrajituri];
+			for (int i = 0; i < c.nrPrajituri; ++i) {
+				std::getline(file, c.prajituri[i]);
+			}
+
+			return file;
+
+		}
+
+
+		/*friend ostream& operator<<(
 			ostream& oStream, 
 			const Cofetarie& c) {
 			oStream << "ID: " << c.id << ", "
@@ -241,9 +283,9 @@ public:
 
 			return oStream;
 
-		}
+		}*/
 
-		friend std::istream& operator>>(std::istream& in, Cofetarie& c) {
+		/*friend std::istream& operator>>(std::istream& in, Cofetarie& c) {
 			std::cout << "Introduceti numele cofetariei: ";
 			in.ignore();
 			std::getline(in, c.nume);
@@ -267,14 +309,32 @@ public:
 			}
 
 			return in;
-		}
+		}*/
 
+		
 		friend bool operator>(const Cofetarie& c1, const Cofetarie& c2);
 
 		friend bool operator!=(const Cofetarie& c1, const Cofetarie& c2) {
 			return c1.nume != c2.nume;
 		}
-		
+
+
+
+
+		//10. Functii pentru lucrul cu fisiere text:
+		static void citesteDinFisier(string numeFisier) {
+			Cofetarie cofetarieDinFisier;
+			ifstream fis(numeFisier, ios::in);
+			fis >> cofetarieDinFisier;
+			fis.close();
+			cout << cofetarieDinFisier;
+		}
+
+		static void scrieInFisier(const Cofetarie& c) {
+			ofstream fis("cofetarie.txt", ios::out);
+			fis << c;
+			fis.close();
+			}
 
 	};
 
@@ -435,37 +495,94 @@ public:
 
 	friend int operator% (const Angajat& a, int x);
 
-	friend ostream& operator<<(ostream& oStream, const Angajat& a) {
-		oStream << a.id << "; "
-			<< a.CNP << "; "
-			<< a.nume << "; "
-			<< a.prenume << "; ";
+	//friend ostream& operator<<(ostream& oStream, const Angajat& a) {
+	//	oStream << a.id << "; "
+	//		<< a.CNP << "; "
+	//		<< a.nume << "; "
+	//		<< a.prenume << "; ";
+	//	if (a.functie != nullptr) {
+	//		oStream << a.functie << "; ";
+	//	}
+	//	else {
+	//		oStream << "Functie necunoscuta";
+	//	}
+	//	return oStream;
+	//};
+
+	//friend istream& operator>>(istream& in, Angajat& a) {
+	//	
+	//	cout << "Introduceti numele angajatului: ";
+	//	in >> a.nume;
+
+	//	cout << "Introduceti prenumele angajatului: ";
+	//	in >> a.prenume;
+
+	//	cout << "Introduceti functia angajtului: ";
+	//	string tempFunctie;
+	//	in >> tempFunctie;
+	//	a.functie = new char[tempFunctie.length() + 1];
+	//	strcpy_s(a.functie, tempFunctie.length() + 1, tempFunctie.c_str());
+
+
+	//	return in;
+	//}
+
+	friend void operator<<(std::ostream& out, const Angajat& a) {
+		out << a.id << std::endl;
+		out << a.CNP << std::endl;
+		out << a.nume << std::endl;
+		out << a.prenume << std::endl;
+
 		if (a.functie != nullptr) {
-			oStream << a.functie << "; ";
+				out << a.functie << std::endl;
+			}
+			else {
+				out << "Functie necunoscuta";
+			}
+		};
+
+
+	friend ifstream& operator>>(ifstream& file, Angajat& a) {
+
+		int tempId;
+		file >> tempId;
+		if (file) {
+			const_cast<int&>(a.id) = tempId;
 		}
-		else {
-			oStream << "Functie necunoscuta";
+
+		long long tempCNP;
+		file >> tempCNP;
+		if (file) {
+			const_cast<long long&>(a.CNP) = tempCNP;
 		}
-		return oStream;
-	};
 
-	friend istream& operator>>(istream& in, Angajat& a) {
-		
-		cout << "Introduceti numele angajatului: ";
-		in >> a.nume;
+		file >> a.nume;
+		file >> a.prenume;
 
-		cout << "Introduceti prenumele angajatului: ";
-		in >> a.prenume;
+		char buffer[20];
+		file >> buffer;
+		a.functie = new char[strlen(buffer)+1];
+		strcpy_s(a.functie, strlen(buffer) + 1, buffer);
+		return file;
 
-		cout << "Introduceti functia angajtului: ";
-		string tempFunctie;
-		in >> tempFunctie;
-		a.functie = new char[tempFunctie.length() + 1];
-		strcpy_s(a.functie, tempFunctie.length() + 1, tempFunctie.c_str());
-
-
-		return in;
 	}
+	
+
+	//10. Functii pentru lucrul cu fisiere text:
+	static void citesteDinFisier(string numeFisier) {
+		Angajat angajatDinFisier;
+		ifstream fis(numeFisier, ios::in);
+		fis >> angajatDinFisier;
+		fis.close();
+		cout << angajatDinFisier;
+	}
+
+	static void scrieInFisier(const Angajat& a) {
+		ofstream fis("angajat.txt", ios::out);
+		fis << a;
+		fis.close();
+	}
+
 
 
 };
@@ -844,196 +961,204 @@ int main() {
 	Cofetarie cofetarie2("Adresa 1", new string[3]{ "Amandina", "Savarina", "Tort diplomat" }, 3);
 	Cofetarie cofetarie3("Adresa 2", new string[2]{ "Tiramisu", "Dobos" }, 2, "Popescu Ion");
 
-	Angajat angajat1;
-	Angajat angajat2("Popescu", "Ion", 1234567890000, "Administrator");
-	Angajat angajat3("Ionescu", "Maria", 2123456789000);
-
-	Prajitura prajitura1;
-	Prajitura prajitura2("Amandina", 15.5, 10);
-	Prajitura prajitura3("Foret Noir", 18.2, 3, new string[3]{ "Visine", "Zahar", "Oua" }, 6);
+	Cofetarie::scrieInFisier(cofetarie3);
+	Cofetarie::citesteDinFisier("cofetarie.txt");
 
 
-	 //Getteri si setteri
-	cofetarie1.setAdministrator("New Admin");
-	cout << cofetarie1.getAdministrator() << endl;
+	 Angajat angajat1;
+	 Angajat angajat2("Popescu", "Ion", 1234567890000, "Administrator");
+	 Angajat angajat3("Ionescu", "Maria", 2123456789000);
 
-	cofetarie1.setAdresa("New Address");
-	cout << cofetarie1.getAdresa() << endl;
+	 Angajat::scrieInFisier(angajat2);
+	 Angajat::citesteDinFisier("angajat.txt");
 
-	cofetarie1.setPrajituri(new string[2]{ "Profiterol", "Amandina" }, 2);
-	string* prajituri = cofetarie1.getPrajituri();
-	for (int i = 0; i < cofetarie1.getNrPrajituri(); ++i) {
-		cout << prajituri[i] << " ";
-	}
-	cout << endl;
+	// Prajitura prajitura1;
+	// Prajitura prajitura2("Amandina", 15.5, 10);
+	// Prajitura prajitura3("Foret Noir", 18.2, 3, new string[3]{ "Visine", "Zahar", "Oua" }, 6);
 
-	angajat1.setFunctie("Cofetar");
-	cout << angajat1.getFunctie() << endl;
 
-	angajat1.setNume("Matei");
-	cout << angajat1.getNume() << endl;
+	//  //Getteri si setteri
+	// cofetarie1.setAdministrator("New Admin");
+	// cout << cofetarie1.getAdministrator() << endl;
 
-	angajat1.setPrenume("Marius");
-	cout << angajat1.getPrenume() << endl;
+	// cofetarie1.setAdresa("New Address");
+	// cout << cofetarie1.getAdresa() << endl;
 
-	prajitura1.setIngrediente(new string[2]{ "Frisca", "Biscuiti" }, 2);
-	string* ingrediente = prajitura1.getIngrediente();
-	for (int i = 0; i < prajitura1.getNrIngrediente(); ++i) {
-		cout << ingrediente[i] << " ";
-	}
-	cout << endl;
+	// cofetarie1.setPrajituri(new string[2]{ "Profiterol", "Amandina" }, 2);
+	// string* prajituri = cofetarie1.getPrajituri();
+	// for (int i = 0; i < cofetarie1.getNrPrajituri(); ++i) {
+	// 	cout << prajituri[i] << " ";
+	// }
+	// cout << endl;
+
+	// angajat1.setFunctie("Cofetar");
+	// cout << angajat1.getFunctie() << endl;
+
+	// angajat1.setNume("Matei");
+	// cout << angajat1.getNume() << endl;
+
+	// angajat1.setPrenume("Marius");
+	// cout << angajat1.getPrenume() << endl;
+
+	// prajitura1.setIngrediente(new string[2]{ "Frisca", "Biscuiti" }, 2);
+	// string* ingrediente = prajitura1.getIngrediente();
+	// for (int i = 0; i < prajitura1.getNrIngrediente(); ++i) {
+	// 	cout << ingrediente[i] << " ";
+	// }
+	// cout << endl;
 
 	
-	prajitura1.setNrBucati(10);
-	cout << prajitura1.getNrBucati() << endl;
+	// prajitura1.setNrBucati(10);
+	// cout << prajitura1.getNrBucati() << endl;
 	
-	prajitura1.setNume("Cea mai buna prajitura");
-	cout << prajitura1.getNume() << endl;
+	// prajitura1.setNume("Cea mai buna prajitura");
+	// cout << prajitura1.getNume() << endl;
 
-	prajitura1.setPret(23.5);
-	cout << prajitura1.getPret() << endl;
+	// prajitura1.setPret(23.5);
+	// cout << prajitura1.getPret() << endl;
 
-	prajitura1.setNrIngrediente(2);
-	cout << prajitura1.getNrIngrediente() << endl;
+	// prajitura1.setNrIngrediente(2);
+	// cout << prajitura1.getNrIngrediente() << endl;
 
 
-	//// Metode statice
+	// //// Metode statice
 
-	Cofetarie::setCodCaen(1234); 
-	cout << "Cod CAEN: " << Cofetarie::getCodCaen() << endl;
+	// Cofetarie::setCodCaen(1234); 
+	// cout << "Cod CAEN: " << Cofetarie::getCodCaen() << endl;
 	
-	Cofetarie::setNrCofetarii(5);
-	cout << Cofetarie::getNrCofetarii() << endl;
+	// Cofetarie::setNrCofetarii(5);
+	// cout << Cofetarie::getNrCofetarii() << endl;
 
-	Angajat::setNrAngajati(20);
-	cout << Angajat::getNrAngajati() << endl;
+	// Angajat::setNrAngajati(20);
+	// cout << Angajat::getNrAngajati() << endl;
 
-	Prajitura::setNrPrajituri(10);
-	cout << Prajitura::getNrPrajituri() << endl;
+	// Prajitura::setNrPrajituri(10);
+	// cout << Prajitura::getNrPrajituri() << endl;
 
 
-	//// Methode friend
-	cout << getAdmin(cofetarie2) << endl;
-	printFullName(angajat3);
+	// //// Methode friend
+	// cout << getAdmin(cofetarie2) << endl;
+	// printFullName(angajat3);
 
-	///Operatori
-	//Cofetarie:
-	//1. operatorul = 
-	Cofetarie cofetarie4 = cofetarie3;
+	// ///Operatori
+	// //Cofetarie:
+	// //1. operatorul = 
+	// Cofetarie cofetarie4 = cofetarie3;
 
-	//2. operatorul <<
-	cout << cofetarie4 << endl;
+	// //2. operatorul <<
+	// cout << cofetarie4 << endl;
 
-	//3. operatorul >
-	bool rez1 = cofetarie4 > cofetarie1;
-	cout << rez1 << endl;
+	// //3. operatorul >
+	// bool rez1 = cofetarie4 > cofetarie1;
+	// cout << rez1 << endl;
 
-	//4. operatorul !=
-	bool rez2 = cofetarie4 != cofetarie3;
-	cout << rez2 << endl;
-	bool rez3 = cofetarie4 != cofetarie2;
-	cout << rez3 << endl;
+	// //4. operatorul !=
+	// bool rez2 = cofetarie4 != cofetarie3;
+	// cout << rez2 << endl;
+	// bool rez3 = cofetarie4 != cofetarie2;
+	// cout << rez3 << endl;
 
-	////////////
+	// ////////////
 
-	//Angajat:
-		//1. operatorul = 
-	Angajat angajat4 = angajat3;
+	// //Angajat:
+	// 	//1. operatorul = 
+	// Angajat angajat4 = angajat3;
 
-		//2. operatorul <<
-	cout << angajat4 << endl;
+	// 	//2. operatorul <<
+	// cout << angajat4 << endl;
 
-		//3. operatorul %
-	bool rez4 = angajat4%2;
-	cout << rez4 << endl;
+	// 	//3. operatorul %
+	// bool rez4 = angajat4%2;
+	// cout << rez4 << endl;
 
-		//4. operatorul ==
-	bool rez5 = angajat4 == angajat3;
-	cout << rez5 << endl;
-	bool rez6 = angajat4 == angajat1;
-	cout << rez6 << endl;
+	// 	//4. operatorul ==
+	// bool rez5 = angajat4 == angajat3;
+	// cout << rez5 << endl;
+	// bool rez6 = angajat4 == angajat1;
+	// cout << rez6 << endl;
 	
 
-	//Prajitura:
-		//1. operatorul =
-	Prajitura prajitura4 = prajitura3;
+	// //Prajitura:
+	// 	//1. operatorul =
+	// Prajitura prajitura4 = prajitura3;
 
-		//2. operatorul <<
-	cout << prajitura4 << endl;
+	// 	//2. operatorul <<
+	// cout << prajitura4 << endl;
 
-		//3. operatorul >
-	int rez7 = prajitura4 > prajitura1; 
-	cout << rez7 << endl;
+	// 	//3. operatorul >
+	// int rez7 = prajitura4 > prajitura1; 
+	// cout << rez7 << endl;
 
-		//4. operatorul float()
-	cout << (float)prajitura4 << endl;
+	// 	//4. operatorul float()
+	// cout << (float)prajitura4 << endl;
 
 
-	vector<Cofetarie> vectorCofetarii;
-	vector<Angajat> vectorAngajati;
-	vector<Prajitura> vectorPrajituri;
+	// vector<Cofetarie> vectorCofetarii;
+	// vector<Angajat> vectorAngajati;
+	// vector<Prajitura> vectorPrajituri;
 
-	int n;
-	cout << "Introduceti numarul de cofetarii pe care le veti introduce: ";
-	cin >> n;
-	cin.ignore();
-	vectorCofetarii.resize(n);
-	for (int i = 0; i < n; ++i) {
-		cout << "Introduceti detaliile cofetariei " << i + 1 << ":\n";
-		cin >> vectorCofetarii[i];
-	}
+	// int n;
+	// cout << "Introduceti numarul de cofetarii pe care le veti introduce: ";
+	// cin >> n;
+	// cin.ignore();
+	// vectorCofetarii.resize(n);
+	// for (int i = 0; i < n; ++i) {
+	// 	cout << "Introduceti detaliile cofetariei " << i + 1 << ":\n";
+	// 	cin >> vectorCofetarii[i];
+	// }
 
-	int m;
-	cout << "Introduceti numarul de angajati pe care ii veti introduce: ";
-	cin >> m;
-	cin.ignore();
-	vectorAngajati.resize(m);
-	for (int i = 0; i < m; ++i) {
-		cout << "Introduceti detaliile angajatului " << i + 1 << ":\n";
-		cin >> vectorAngajati[i];
-	}
+	// int m;
+	// cout << "Introduceti numarul de angajati pe care ii veti introduce: ";
+	// cin >> m;
+	// cin.ignore();
+	// vectorAngajati.resize(m);
+	// for (int i = 0; i < m; ++i) {
+	// 	cout << "Introduceti detaliile angajatului " << i + 1 << ":\n";
+	// 	cin >> vectorAngajati[i];
+	// }
 
-	int p;
-	cout << "Introduceti numarul de prajituri pe care le veti introduce: ";
-	cin >> p;
-	cin.ignore();
-	vectorPrajituri.resize(p);
-	for (int i = 0; i < p; ++i) {
-		cout << "Introduceti detaliile prajiturii " << i + 1 << ":\n";
-		cin >> vectorPrajituri[i];
-	}
+	// int p;
+	// cout << "Introduceti numarul de prajituri pe care le veti introduce: ";
+	// cin >> p;
+	// cin.ignore();
+	// vectorPrajituri.resize(p);
+	// for (int i = 0; i < p; ++i) {
+	// 	cout << "Introduceti detaliile prajiturii " << i + 1 << ":\n";
+	// 	cin >> vectorPrajituri[i];
+	// }
 
-	for (int i = 0; i < m; i++) {
-		cout << vectorCofetarii[i];
-	}
+	// for (int i = 0; i < m; i++) {
+	// 	cout << vectorCofetarii[i];
+	// }
 
-	for (int i = 0; i < n; i++) {
-		cout << vectorAngajati[i];
-	}
+	// for (int i = 0; i < n; i++) {
+	// 	cout << vectorAngajati[i];
+	// }
 
-	for (int i = 0; i < p; i++) {
-		cout << vectorPrajituri[i];
-	}
+	// for (int i = 0; i < p; i++) {
+	// 	cout << vectorPrajituri[i];
+	// }
 
-	int rows = 2;
-	int cols = 2;
+	// int rows = 2;
+	// int cols = 2;
 
-	vector<vector<Prajitura>> matricePrajituri(rows, vector<Prajitura>(cols));
+	// vector<vector<Prajitura>> matricePrajituri(rows, vector<Prajitura>(cols));
 
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < cols; j++) {
-			cout << "\nIntroduceti detalii pentru prajitura de pe randul " << i + 1 << " si coloana " << j + 1 << ":\n";
-				cin >> matricePrajituri[i][j];
-		}
-	}
+	// for (int i = 0; i < rows; i++) {
+	// 	for (int j = 0; j < cols; j++) {
+	// 		cout << "\nIntroduceti detalii pentru prajitura de pe randul " << i + 1 << " si coloana " << j + 1 << ":\n";
+	// 			cin >> matricePrajituri[i][j];
+	// 	}
+	// }
 
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < cols; j++) {
-			cout << "\nPrajitura rand " << i + 1 << " coloana " << j + 1 << ":\n";
-			cout << matricePrajituri[i][j] << endl;
-		}
-	}
+	// for (int i = 0; i < rows; i++) {
+	// 	for (int j = 0; j < cols; j++) {
+	// 		cout << "\nPrajitura rand " << i + 1 << " coloana " << j + 1 << ":\n";
+	// 		cout << matricePrajituri[i][j] << endl;
+	// 	}
+	// }
 
 
 	return 0;
+
 }
