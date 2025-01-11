@@ -91,7 +91,7 @@
 
 ---
 
-## Proiect - Faza 6  
+## Proiect - Faza 6    ✅ 
 1. Pentru clasele implementate adăugați metode sau operatori care să lucreze cu:  
    - **Fișiere text**.  
    - **Fișiere binare**.  
