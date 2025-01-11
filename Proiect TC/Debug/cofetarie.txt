@@ -1,2 +1,7 @@
-ID: 3, Nume: Necunoscut, Adresa: Adresa 2, Administrator Popescu Ion, Prajituri: 
-Tiramisu, Dobos
+3
+Necunoscut
+Adresa 2
+Popescu Ion
+2
+Tiramisu
+Dobos

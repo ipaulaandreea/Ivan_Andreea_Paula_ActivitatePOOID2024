@@ -801,6 +801,49 @@ public:
 		return in;
 	}
 
+	//Citire/scriere in fisiere binare
+
+	void scrieInFisierBinar(fstream& f) {
+		int lungimeNume = this->nume.size();
+		f.write((char*)&lungimeNume, sizeof(int));          
+		f.write(this->nume.c_str(), lungimeNume);           
+		f.write((char*)&this->pret, sizeof(float));         
+		f.write((char*)&this->nrIngrediente, sizeof(int));  
+		f.write((char*)&this->nrBucati, sizeof(int));       
+
+		for (int i = 0; i < this->nrIngrediente; i++) {
+			int lungimeIngredient = this->ingrediente[i].size();
+			f.write((char*)&lungimeIngredient, sizeof(int));    
+			f.write(this->ingrediente[i].c_str(), lungimeIngredient); 
+		}
+	}
+	
+	void citesteDinFisierBinar(fstream& f) {
+		int lungimeNume;
+		f.read((char*)&lungimeNume, sizeof(int));          
+		char* bufferNume = new char[lungimeNume + 1];
+		f.read(bufferNume, lungimeNume);                 
+		bufferNume[lungimeNume] = '\0';                    
+		this->nume = bufferNume;                        
+		delete[] bufferNume;
+
+		f.read((char*)&this->pret, sizeof(float));       
+
+		f.read((char*)&this->nrIngrediente, sizeof(int)); 
+
+		this->ingrediente = new string[this->nrIngrediente];
+		for (int i = 0; i < this->nrIngrediente; i++) {
+			int lungimeIngredient;
+			f.read((char*)&lungimeIngredient, sizeof(int));   
+			char* bufferIngredient = new char[lungimeIngredient + 1];
+			f.read(bufferIngredient, lungimeIngredient);      
+			bufferIngredient[lungimeIngredient] = '\0';       
+			this->ingrediente[i] = bufferIngredient;          
+			delete[] bufferIngredient;
+		}
+
+		f.read((char*)&this->nrBucati, sizeof(int));        
+	}
 
 };
 
@@ -874,7 +917,7 @@ public:
 		}
 	}
 
-	friend std::ostream& operator<<(std::ostream& out, const PlatouPrajituri& pp) { 
+	friend std::ostream& operator<<(ostream& out, const PlatouPrajituri& pp) { 
 		out << pp.id << endl;
 		out << pp.nume << endl;
 		if (pp.nrPrajituri > 0 && pp.prajituri != nullptr) {
@@ -887,8 +930,7 @@ public:
 		else {
 			out << "Platou gol" << endl;
 		}
-
-
+		return out;
 
 };
 	friend int operator>(const PlatouPrajituri& p1, const PlatouPrajituri& p2) {
@@ -896,7 +938,60 @@ public:
 	}
 
 	friend std::istream& operator>>(std::istream& in, PlatouPrajituri& pp);
+
+	//Citire/scriere in fisiere binare
+
+	void scrieInFisierBinar(fstream& f) {
+		int lungimeNume = this->nume.size();
+		f.write((char*)&lungimeNume, sizeof(int)); 
+		f.write(this->nume.c_str(), lungimeNume); 
+
+		f.write((char*)&this->nrPrajituri, sizeof(int));
+
+		for (int i = 0; i < this->nrPrajituri; i++) {
+			string numePrajitura = this->prajituri[i].getNume();
+			int lungimeNumePrajitura = numePrajitura.size();
+			//int lungimeNumePrajitura = this->prajituri[i].getNume().size();
+			f.write((char*)&lungimeNumePrajitura, sizeof(int));
+			f.write(this->prajituri[i].getNume().c_str(), lungimeNumePrajitura);
+		}
+	}
+
+
+void citesteDinFisierBinar(fstream& f) {
+    int lungimeNume;
+    f.read((char*)&lungimeNume, sizeof(int));
+
+    char* bufferNume = new char[lungimeNume + 1];
+    f.read(bufferNume, lungimeNume);
+    bufferNume[lungimeNume] = '\0';
+
+    this->nume = bufferNume;
+    delete[] bufferNume; 
+
+    f.read((char*)&this->nrPrajituri, sizeof(int));
+
+
+    this->prajituri = new Prajitura[this->nrPrajituri];
+
+    for (int i = 0; i < this->nrPrajituri; i++) {
+        int lungimeNumePrajitura;
+        f.read((char*)&lungimeNumePrajitura, sizeof(int));
+		//momentan ma intereseaza doar numele prajiturilor
+
+        char* bufferNumePrajitura = new char[lungimeNumePrajitura + 1];
+        f.read(bufferNumePrajitura, lungimeNumePrajitura);
+        bufferNumePrajitura[lungimeNumePrajitura] = '\0'; 
+        this->prajituri[i] = Prajitura(bufferNumePrajitura, 0, 0);
+
+        delete[] bufferNumePrajitura;
+    }
+}
+
+
 };
+
+
 
 std::istream& operator>>(std::istream& in, PlatouPrajituri& pp) {
 	in >> pp.nume;
@@ -961,21 +1056,74 @@ int main() {
 	Cofetarie cofetarie2("Adresa 1", new string[3]{ "Amandina", "Savarina", "Tort diplomat" }, 3);
 	Cofetarie cofetarie3("Adresa 2", new string[2]{ "Tiramisu", "Dobos" }, 2, "Popescu Ion");
 
-	Cofetarie::scrieInFisier(cofetarie3);
-	Cofetarie::citesteDinFisier("cofetarie.txt");
+	//Cofetarie::scrieInFisier(cofetarie3);
+	//Cofetarie::citesteDinFisier("cofetarie.txt");
 
 
 	 Angajat angajat1;
 	 Angajat angajat2("Popescu", "Ion", 1234567890000, "Administrator");
 	 Angajat angajat3("Ionescu", "Maria", 2123456789000);
 
-	 Angajat::scrieInFisier(angajat2);
-	 Angajat::citesteDinFisier("angajat.txt");
+	 //Angajat::scrieInFisier(angajat2);
+	 //Angajat::citesteDinFisier("angajat.txt");
 
-	// Prajitura prajitura1;
-	// Prajitura prajitura2("Amandina", 15.5, 10);
-	// Prajitura prajitura3("Foret Noir", 18.2, 3, new string[3]{ "Visine", "Zahar", "Oua" }, 6);
+	 Prajitura prajitura1;
+	 Prajitura prajitura2("Amandina", 15.5, 10);
+	 Prajitura prajitura3("Foret Noir", 18.2, 3, new string[3]{ "Visine", "Zahar", "Oua" }, 6);
 
+	 
+	 fstream fisier("prajitura.dat", ios::out | ios::binary);
+	 if (!fisier.is_open()) {
+		 cout << "Eroare la crearea fisierului!" << endl;
+		 return 1;
+	 }
+
+	 prajitura2.scrieInFisierBinar(fisier);
+	
+	fisier.close();
+
+	fisier.open("prajitura.dat", ios::in | ios::binary);
+    if (!fisier.is_open()) {
+        cout << "Eroare la deschiderea fisierului!" << endl;
+        return 1; 
+    }
+
+    fisier.seekg(0, ios::beg);
+
+	 Prajitura prajitura;
+	 prajitura.citesteDinFisierBinar(fisier);
+	 fisier.close();
+	 cout << prajitura << endl;
+
+	PlatouPrajituri platou1("Platou 1", 3, new Prajitura[3]{ prajitura1, prajitura2, prajitura3 });
+
+	 fstream fisier2("platou.dat", ios::out | ios::binary);
+	 if (!fisier2.is_open()) {
+		 cout << "Eroare la crearea fisierului!" << endl;
+		 return 1;
+
+	 }
+	fisier.open("prajitura.dat", ios::in | ios::binary);
+    if (!fisier.is_open()) {
+        cout << "Eroare la deschiderea fisierului!" << endl;
+        return 1; 
+    }
+	 platou1.scrieInFisierBinar(fisier2);
+
+	 fisier2.close();
+
+	fisier2.open("platou.dat", ios::in | ios::binary);
+    if (!fisier2.is_open()) {
+        cout << "Eroare la deschiderea fiierului!" << endl;
+        return 1; 
+    }
+
+    fisier2.seekg(0, ios::beg);
+
+	 PlatouPrajituri platou;
+	 platou.citesteDinFisierBinar(fisier2);
+	 fisier2.close();
+	 cout << platou;  
 
 	//  //Getteri si setteri
 	// cofetarie1.setAdministrator("New Admin");
