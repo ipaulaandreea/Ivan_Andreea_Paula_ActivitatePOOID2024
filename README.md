@@ -102,7 +102,7 @@
 
 ---
 
-## Proiect - Faza 7  
+## Proiect - Faza 7  ✅
 1. În cadrul proiectului adăugați alte **două clase** care să moștenească una sau două dintre clasele existente deja în proiect (**relație de is-a**).  
 
 2. Pentru noile clase adăugați:  

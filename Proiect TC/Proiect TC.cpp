@@ -334,7 +334,7 @@ public:
 			ofstream fis("cofetarie.txt", ios::out);
 			fis << c;
 			fis.close();
-			}
+			};
 
 	};
 
@@ -845,6 +845,11 @@ public:
 		f.read((char*)&this->nrBucati, sizeof(int));        
 	}
 
+	////functie virtuala
+		virtual void metodaDeSuprascris() {
+		cout << "prajiturile sunt bune!" << endl;
+	};
+
 };
 
 class PlatouPrajituri {
@@ -1013,6 +1018,96 @@ std::istream& operator>>(std::istream& in, PlatouPrajituri& pp) {
 
 };
 
+///////////////////////Clase-copil///////////////////////////
+class PrajituraDiabetici:public Prajitura {
+private:
+	string tipIndulcitor;
+	float concentratieIndulcitor;
+
+public:
+	PrajituraDiabetici()
+		: Prajitura(), tipIndulcitor("Necunoscut"), concentratieIndulcitor(0.0) {};
+
+	PrajituraDiabetici(const std::string& nume, float pret, int nrBucati, 
+	const std::string& tipIndulcitor, double concentratieIndulcitor){
+			Prajitura(nume, pret, nrBucati);
+          	this->tipIndulcitor = tipIndulcitor; 
+          	this->concentratieIndulcitor = concentratieIndulcitor;
+	};
+
+	string getTipIndulcitor() {
+		return this->tipIndulcitor;
+	};
+
+	float getConcentratieIndulcitor() {
+		return this->concentratieIndulcitor;
+	};
+
+	// string getNume(){
+	// 	return Prajitura::getNume();
+	// }
+
+	void setTipIndulcitor(const string& tipIndulcitor) {
+		this->tipIndulcitor = tipIndulcitor;
+	};
+
+	// void setNume(const string& nume){
+	// 	Prajitura::setNume(nume);
+	// };
+
+	void setConcentratieIndulcitor(float concentratieIndulcitor) {
+		this->concentratieIndulcitor = concentratieIndulcitor;
+	};
+        
+ bool operator > (const PrajituraDiabetici& p2) const {
+    return this->concentratieIndulcitor > p2.concentratieIndulcitor;
+};
+	void metodaDeSuprascris() override {
+		cout << "prajiturile fara zahar sunt si mai bune!" << endl;
+	};
+};
+
+
+class PrajituraPaleo :public Prajitura {
+private:
+	string tipInlocuitorGluten;
+	int grameCarbohidrati;
+
+public:
+	PrajituraPaleo()
+		: Prajitura(), tipInlocuitorGluten("Necunoscut"), grameCarbohidrati(0) {};
+
+	PrajituraPaleo(const std::string& nume, float pret, int nrBucati,
+		const std::string& tipInlocuitorGluten, int grameCarbohidrati) {
+		Prajitura(nume, pret, nrBucati);
+		this->tipInlocuitorGluten = tipInlocuitorGluten;
+		this->grameCarbohidrati = grameCarbohidrati;
+	};
+
+	string getTipInlocuitorGluten() {
+		return this->tipInlocuitorGluten;
+	};
+
+	float getGrameCarbohidrati() {
+		return this->grameCarbohidrati;
+	};
+
+
+	void setTipInlocuitorGluten(const string& tipInlocuitorGluten) {
+		this->tipInlocuitorGluten = tipInlocuitorGluten;
+	};
+
+
+	void setGrameCarbohidrati(int grameCarbohidrati) {
+		this->grameCarbohidrati = grameCarbohidrati;
+	};
+
+	void metodaDeSuprascris() override {
+		cout << "prajiturile paleo sunt si mai bune!" << endl;
+	};
+};
+
+
 ///////////////////////////////////////////////////////////
 // Functii globale
 string getAdmin(Cofetarie c) { return c.administrator; };
@@ -1034,7 +1129,10 @@ void printFullName(Angajat a) {
 
 bool operator>(Prajitura& p1, Prajitura& p2) {
 	return p1.getPret() > p2.getPret();
-}
+};
+
+
+
 
 
 ///////////////////////////////////////////////////////////
@@ -1072,58 +1170,95 @@ int main() {
 	 Prajitura prajitura3("Foret Noir", 18.2, 3, new string[3]{ "Visine", "Zahar", "Oua" }, 6);
 
 	 
-	 fstream fisier("prajitura.dat", ios::out | ios::binary);
-	 if (!fisier.is_open()) {
-		 cout << "Eroare la crearea fisierului!" << endl;
-		 return 1;
-	 }
+	// fstream fisier("prajitura.dat", ios::out | ios::binary);
+	// if (!fisier.is_open()) {
+	//	 cout << "Eroare la crearea fisierului!" << endl;
+	//	 return 1;
+	// }
 
-	 prajitura2.scrieInFisierBinar(fisier);
-	
-	fisier.close();
+	// prajitura2.scrieInFisierBinar(fisier);
+	//
+	//fisier.close();
 
-	fisier.open("prajitura.dat", ios::in | ios::binary);
-    if (!fisier.is_open()) {
-        cout << "Eroare la deschiderea fisierului!" << endl;
-        return 1; 
-    }
+	//fisier.open("prajitura.dat", ios::in | ios::binary);
+ //   if (!fisier.is_open()) {
+ //       cout << "Eroare la deschiderea fisierului!" << endl;
+ //       return 1; 
+ //   }
 
-    fisier.seekg(0, ios::beg);
+ //   fisier.seekg(0, ios::beg);
 
-	 Prajitura prajitura;
-	 prajitura.citesteDinFisierBinar(fisier);
-	 fisier.close();
-	 cout << prajitura << endl;
+	// Prajitura prajitura;
+	// prajitura.citesteDinFisierBinar(fisier);
+	// fisier.close();
+	// cout << prajitura << endl;
 
-	PlatouPrajituri platou1("Platou 1", 3, new Prajitura[3]{ prajitura1, prajitura2, prajitura3 });
+	//PlatouPrajituri platou1("Platou 1", 3, new Prajitura[3]{ prajitura1, prajitura2, prajitura3 });
 
-	 fstream fisier2("platou.dat", ios::out | ios::binary);
-	 if (!fisier2.is_open()) {
-		 cout << "Eroare la crearea fisierului!" << endl;
-		 return 1;
+	// fstream fisier2("platou.dat", ios::out | ios::binary);
+	// if (!fisier2.is_open()) {
+	//	 cout << "Eroare la crearea fisierului!" << endl;
+	//	 return 1;
 
-	 }
-	fisier.open("prajitura.dat", ios::in | ios::binary);
-    if (!fisier.is_open()) {
-        cout << "Eroare la deschiderea fisierului!" << endl;
-        return 1; 
-    }
-	 platou1.scrieInFisierBinar(fisier2);
+	// }
+	//fisier.open("prajitura.dat", ios::in | ios::binary);
+ //   if (!fisier.is_open()) {
+ //       cout << "Eroare la deschiderea fisierului!" << endl;
+ //       return 1; 
+ //   }
+	// platou1.scrieInFisierBinar(fisier2);
 
-	 fisier2.close();
+	// fisier2.close();
 
-	fisier2.open("platou.dat", ios::in | ios::binary);
-    if (!fisier2.is_open()) {
-        cout << "Eroare la deschiderea fiierului!" << endl;
-        return 1; 
-    }
+	//fisier2.open("platou.dat", ios::in | ios::binary);
+ //   if (!fisier2.is_open()) {
+ //       cout << "Eroare la deschiderea fiierului!" << endl;
+ //       return 1; 
+ //   }
 
-    fisier2.seekg(0, ios::beg);
+ //   fisier2.seekg(0, ios::beg);
 
-	 PlatouPrajituri platou;
-	 platou.citesteDinFisierBinar(fisier2);
-	 fisier2.close();
-	 cout << platou;  
+	// PlatouPrajituri platou;
+	// platou.citesteDinFisierBinar(fisier2);
+	// fisier2.close();
+	// cout << platou;  
+
+	PrajituraDiabetici pd1("Prajitura Stevia", 15.5f, 10, "Stevia", 0.4f);
+    PrajituraDiabetici pd2("Prajitura Erythritol", 12.0f, 5, "Erythritol", 0.6f);
+
+    	cout << "Prajitura 1: " << pd1.getNume() << ", tip indulcitor: " << pd1.getTipIndulcitor() 
+         << ", concentratie indulcitor: " << pd1.getConcentratieIndulcitor() << endl;
+
+    	cout << "Prajitura 2: " << pd2.getNume() << ", tip indulcitor: " << pd2.getTipIndulcitor() 
+         << ", concentratie indulcitor: " << pd2.getConcentratieIndulcitor() << endl;
+
+
+    // Upcasting
+	pd1.metodaDeSuprascris();
+    Prajitura* prajituraUp1 = &pd1;  
+
+   prajituraUp1->metodaDeSuprascris();
+
+   PrajituraPaleo pal1("Prajitura Hrisca", 15.5f, 10, "Faina Hrisca",20);
+   PrajituraPaleo pal2("Prajitura Linte", 12.0f, 5, "Faina linte", 25);
+
+   cout << "Prajitura 1: " << pal1.getNume() << ", tip inlocuitor: " << pal1.getTipInlocuitorGluten()
+	   << ", grame carbohidrati: " << pal1.getGrameCarbohidrati() << endl;
+
+   cout << "Prajitura 2: " << pal2.getNume() << ", tip inlocuitor: " << pal2.getTipInlocuitorGluten()
+	   << ", grame carbohidrati: " << pal2.getGrameCarbohidrati() << endl;
+
+   pal1.setGrameCarbohidrati(14);
+   pal2.setTipInlocuitorGluten("Pudra de Roscove");
+
+
+   // Upcasting
+   pal2.metodaDeSuprascris();
+   Prajitura* prajituraUp2 = &pal2;
+
+   prajituraUp2->metodaDeSuprascris();
+
+	return 0; 
 
 	//  //Getteri si setteri
 	// cofetarie1.setAdministrator("New Admin");
